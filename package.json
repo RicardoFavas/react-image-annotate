@@ -48,6 +48,13 @@
     "type": "git",
     "url": "https://github.com/UniversalDataTool/react-image-annotate.git"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist/",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
     "start": "react-scripts start",
     "test": "react-scripts test",
