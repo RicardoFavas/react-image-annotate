@@ -83,7 +83,10 @@ const RowLayout = ({
   )
 }
 
-const RowHeader = () => {
+const RowHeader = ({ regions, onChangeRegion }) => {
+  const visible = regions.find(r => r.visible === true) == null;
+  const locked = regions.find(r => r.locked === true) == null;
+
   return (
     <RowLayout
       header
@@ -92,8 +95,48 @@ const RowHeader = () => {
       classification={<div style={{ paddingLeft: 10 }}>Class</div>}
       area={<PieChartIcon className="icon" />}
       trash={<TrashIcon className="icon" />}
-      lock={<LockIcon className="icon" />}
-      visible={<VisibleIcon className="icon" />}
+      lock={
+        locked === true ? (
+          <LockIcon
+            onClick={() => {
+              regions.forEach(r => {
+                onChangeRegion({ ...r, locked: true });
+              });
+            }}
+            className="icon"
+          />
+        ) : (
+          <UnlockIcon
+            onClick={() => {
+              regions.forEach(r => {
+                onChangeRegion({ ...r, locked: false });
+              });
+            }}
+            className="icon"
+          />
+        )    
+      }
+      visible={
+          visible ? (
+            <VisibleIcon
+              onClick={() => {
+                regions.forEach(r => {
+                  onChangeRegion({ ...r, visible: true });
+                });
+              }}
+              className="icon"
+            />
+          ) : (
+            <VisibleOffIcon
+              onClick={() => {
+                regions.forEach(r => {
+                  onChangeRegion({ ...r, visible: false });
+                });
+              }}
+              className="icon"
+            />
+          )
+      }
     />
   )
 }
@@ -181,7 +224,10 @@ export const RegionSelectorSidebarBox = ({
         expandedByDefault
       >
         <div className={classes.container}>
-          <MemoRowHeader />
+          <MemoRowHeader 
+            regions={regions}
+            onChangeRegion={onChangeRegion}
+          />
           <HeaderSep />
           {regions.map((r, i) => (
             <MemoRow
