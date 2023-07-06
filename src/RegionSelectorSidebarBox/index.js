@@ -84,8 +84,8 @@ const RowLayout = ({
 }
 
 const RowHeader = ({ regions, onChangeRegion }) => {
-  const visible = regions.find(r => r.visible === true) == null;
-  const locked = regions.find(r => r.locked === true) == null;
+  const visible = regions.find(r => r.visible === false) == null;
+  const locked = regions.find(r => r.locked === false) == null;
 
   return (
     <RowLayout
@@ -100,7 +100,7 @@ const RowHeader = ({ regions, onChangeRegion }) => {
           <LockIcon
             onClick={() => {
               regions.forEach(r => {
-                onChangeRegion({ ...r, locked: true });
+                onChangeRegion({ ...r, locked: false });
               });
             }}
             className="icon"
@@ -109,7 +109,7 @@ const RowHeader = ({ regions, onChangeRegion }) => {
           <UnlockIcon
             onClick={() => {
               regions.forEach(r => {
-                onChangeRegion({ ...r, locked: false });
+                onChangeRegion({ ...r, locked: true });
               });
             }}
             className="icon"
@@ -121,7 +121,7 @@ const RowHeader = ({ regions, onChangeRegion }) => {
             <VisibleIcon
               onClick={() => {
                 regions.forEach(r => {
-                  onChangeRegion({ ...r, visible: true });
+                  onChangeRegion({ ...r, visible: false });
                 });
               }}
               className="icon"
@@ -130,7 +130,7 @@ const RowHeader = ({ regions, onChangeRegion }) => {
             <VisibleOffIcon
               onClick={() => {
                 regions.forEach(r => {
-                  onChangeRegion({ ...r, visible: false });
+                  onChangeRegion({ ...r, visible: true });
                 });
               }}
               className="icon"
@@ -165,7 +165,7 @@ const Row = ({
       area=""
       trash={<TrashIcon onClick={() => onDeleteRegion(r)} className="icon2" />}
       lock={
-        r.locked ? (
+        r.locked || r.locked === undefined ? (
           <LockIcon
             onClick={() => onChangeRegion({ ...r, locked: false })}
             className="icon2"

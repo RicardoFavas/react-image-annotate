@@ -37,6 +37,7 @@ type Props = {
   showPointDistances?: boolean,
   pointDistancePrecision?: number,
   RegionEditLabel?: Node,
+  onChangeHistory?: (MainLayoutState) => any,
   onExit: (MainLayoutState) => any,
   videoTime?: number,
   videoSrc?: string,
@@ -85,6 +86,7 @@ export const Annotator = ({
   videoSrc,
   videoTime = 0,
   videoName,
+  onChangeHistory,
   onExit,
   onNextImage,
   onPrevImage,
@@ -104,6 +106,7 @@ export const Annotator = ({
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
     if (selectedImage === -1) selectedImage = undefined
   }
+
   const annotationType = images ? "image" : "video"
   const [state, dispatchToReducer] = useReducer(
     historyHandler(
@@ -131,6 +134,7 @@ export const Annotator = ({
       imageTagList,
       currentVideoTime: videoTime,
       enabledTools,
+      onChangeHistory,
       history: [],
       videoName,
       keypointDefinitions,

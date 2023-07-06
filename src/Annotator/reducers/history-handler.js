@@ -10,8 +10,8 @@ const typesToSaveWithHistory = {
   DELETE_REGION: "Delete Region",
 }
 
-export const saveToHistory = (state: MainLayoutState, name: string) =>
-  updateIn(state, ["history"], (h) =>
+export const saveToHistory = (state: MainLayoutState, name: string) => {
+  const nextState = updateIn(state, ["history"], (h) =>
     [
       {
         time: moment().toDate(),
@@ -19,27 +19,34 @@ export const saveToHistory = (state: MainLayoutState, name: string) =>
         name,
       },
     ].concat((h || []).slice(0, 9))
-  )
+  );
+  if (typeof state.onChangeHistory === 'function') {
+    state.onChangeHistory(nextState);
+  }
+  return nextState;
+}
 
 export default (reducer) => {
   return (state: MainLayoutState, action: Action) => {
     const prevState = state
-    const nextState = reducer(state, action)
+    let nextState = reducer(state, action);
+
 
     if (action.type === "RESTORE_HISTORY") {
       if (state.history.length > 0) {
-        return setIn(
+        nextState = setIn(
           nextState.history[0].state,
           ["history"],
           nextState.history.slice(1)
-        )
+        );
+        if (typeof prevState.onChangeHistory === 'function') {
+          prevState.onChangeHistory(nextState);
+        }
+        return nextState;
       }
     } else {
-      if (
-        prevState !== nextState &&
-        Object.keys(typesToSaveWithHistory).includes(action.type)
-      ) {
-        return setIn(
+      if (prevState !== nextState && Object.keys(typesToSaveWithHistory).includes(action.type)) {
+        nextState = setIn(
           nextState,
           ["history"],
           [
@@ -52,6 +59,10 @@ export default (reducer) => {
             .concat(nextState.history || [])
             .slice(0, 9)
         )
+        if (typeof state.onChangeHistory === 'function') {
+          state.onChangeHistory(nextState);
+        }
+        return nextState;
       }
     }
 
