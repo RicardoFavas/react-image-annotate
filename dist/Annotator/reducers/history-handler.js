@@ -13,21 +13,17 @@ export var saveToHistory = function saveToHistory(state, name) {
       name: name
     }].concat((h || []).slice(0, 9));
   });
-  if (typeof state.onChangeHistory === 'function') {
-    state.onChangeHistory(nextState);
-  }
   return nextState;
 };
 export default (function (reducer) {
   return function (state, action) {
+    console.log('ai', state, action)
+
     var prevState = state;
     var nextState = reducer(state, action);
     if (action.type === "RESTORE_HISTORY") {
       if (state.history.length > 0) {
         nextState = setIn(nextState.history[0].state, ["history"], nextState.history.slice(1));
-        if (typeof prevState.onChangeHistory === 'function') {
-          prevState.onChangeHistory(nextState);
-        }
         return nextState;
       }
     } else {
@@ -37,9 +33,6 @@ export default (function (reducer) {
           state: without(prevState, "history"),
           name: typesToSaveWithHistory[action.type] || action.type
         }].concat(nextState.history || []).slice(0, 9));
-        if (typeof state.onChangeHistory === 'function') {
-          state.onChangeHistory(nextState);
-        }
         return nextState;
       }
     }

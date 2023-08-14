@@ -66,7 +66,6 @@ export default (function (state, action) {
     if (obj !== null) {
       return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", regionIndex]), _objectSpread({}, region, obj));
     } else {
-      // delete region
       var regions = activeImage.regions;
       return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (regions || []).filter(function (r) {
         return r.id !== region.id;
@@ -677,6 +676,7 @@ export default (function (state, action) {
             {
               if (state.mode.isNew) {
                 if (Math.abs(state.mode.original.x - _x2) < 0.002 || Math.abs(state.mode.original.y - _y2) < 0.002) {
+                  state.onChange(state);
                   return setIn(modifyRegion(state.mode.regionId, null), ["mode"], null);
                 }
               }

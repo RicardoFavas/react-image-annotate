@@ -20,9 +20,6 @@ export const saveToHistory = (state: MainLayoutState, name: string) => {
       },
     ].concat((h || []).slice(0, 9))
   );
-  if (typeof state.onChangeHistory === 'function') {
-    state.onChangeHistory(nextState);
-  }
   return nextState;
 }
 
@@ -30,8 +27,7 @@ export default (reducer) => {
   return (state: MainLayoutState, action: Action) => {
     const prevState = state
     let nextState = reducer(state, action);
-
-
+    
     if (action.type === "RESTORE_HISTORY") {
       if (state.history.length > 0) {
         nextState = setIn(
@@ -39,9 +35,6 @@ export default (reducer) => {
           ["history"],
           nextState.history.slice(1)
         );
-        if (typeof prevState.onChangeHistory === 'function') {
-          prevState.onChangeHistory(nextState);
-        }
         return nextState;
       }
     } else {
@@ -59,13 +52,9 @@ export default (reducer) => {
             .concat(nextState.history || [])
             .slice(0, 9)
         )
-        if (typeof state.onChangeHistory === 'function') {
-          state.onChangeHistory(nextState);
-        }
         return nextState;
       }
     }
-
     return nextState
   }
 }

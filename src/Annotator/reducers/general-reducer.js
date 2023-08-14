@@ -127,6 +127,7 @@ export default (state: MainLayoutState, action: Action) => {
       return setIn(state, ["selectedCls"], action.cls)
     }
     case "CHANGE_REGION": {
+      state.onChange(state, action); // RFAVAS
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
       const oldRegion = activeImage.regions[regionIndex]
@@ -200,6 +201,7 @@ export default (state: MainLayoutState, action: Action) => {
         state.mode.mode === "DRAW_POLYGON" &&
         pointIndex === 0
       ) {
+        state.onChange(state, action); // RFAVAS
         return setIn(
           modifyRegion(polygon, {
             points: polygon.points.slice(0, -1),
@@ -678,7 +680,7 @@ export default (state: MainLayoutState, action: Action) => {
       state = setIn(state, ["mouseDownAt"], null)
       switch (state.mode.mode) {
         case "RESIZE_BOX": {
-          if (state.mode.isNew) {
+          if (state.mode.isNew) { // if size < 0.002 dont create region
             if (
               Math.abs(state.mode.original.x - x) < 0.002 ||
               Math.abs(state.mode.original.y - y) < 0.002
@@ -690,6 +692,7 @@ export default (state: MainLayoutState, action: Action) => {
               )
             }
           }
+          state.onChange(state, action); // RFAVAS
           if (state.mode.editLabelEditorAfter) {
             return {
               ...modifyRegion(state.mode.regionId, { editingLabels: true }),
@@ -700,12 +703,15 @@ export default (state: MainLayoutState, action: Action) => {
         case "MOVE_REGION":
         case "RESIZE_KEYPOINTS":
         case "MOVE_POLYGON_POINT": {
+          state.onChange(state, action); // RFAVAS
           return { ...state, mode: null }
         }
         case "MOVE_KEYPOINT": {
+          state.onChange(state, action); // RFAVAS
           return { ...state, mode: null }
         }
         case "CREATE_POINT_LINE": {
+          state.onChange(state, action); // RFAVAS
           return state
         }
         case "DRAW_EXPANDING_LINE": {
@@ -784,6 +790,7 @@ export default (state: MainLayoutState, action: Action) => {
     case "DELETE_REGION": {
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
+      state.onChange(state, action); // RFAVAS
       return setIn(
         state,
         [...pathToActiveImage, "regions"],
@@ -791,6 +798,7 @@ export default (state: MainLayoutState, action: Action) => {
       )
     }
     case "DELETE_SELECTED_REGION": {
+      state.onChange(state, action); // RFAVAS
       return setIn(
         state,
         [...pathToActiveImage, "regions"],
