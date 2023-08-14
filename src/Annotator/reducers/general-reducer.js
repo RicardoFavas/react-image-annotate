@@ -127,7 +127,6 @@ export default (state: MainLayoutState, action: Action) => {
       return setIn(state, ["selectedCls"], action.cls)
     }
     case "CHANGE_REGION": {
-      state.onChange(state, action); // RFAVAS
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
       const oldRegion = activeImage.regions[regionIndex]
@@ -145,11 +144,13 @@ export default (state: MainLayoutState, action: Action) => {
       if (!isEqual(oldRegion.comment, action.region.comment)) {
         state = saveToHistory(state, "Change Region Comment")
       }
-      return setIn(
+      const newState = setIn(
         state,
         [...pathToActiveImage, "regions", regionIndex],
         action.region
       )
+      newState.onChange(newState, action); // RFAVAS
+      return newState;
     }
     case "CHANGE_IMAGE": {
       if (!activeImage) return state
@@ -201,8 +202,7 @@ export default (state: MainLayoutState, action: Action) => {
         state.mode.mode === "DRAW_POLYGON" &&
         pointIndex === 0
       ) {
-        state.onChange(state, action); // RFAVAS
-        return setIn(
+        const newState = setIn(
           modifyRegion(polygon, {
             points: polygon.points.slice(0, -1),
             open: false,
@@ -210,14 +210,18 @@ export default (state: MainLayoutState, action: Action) => {
           ["mode"],
           null
         )
+        newState.onChange(newState, action); // RFAVAS
+        return newState;
       } else {
         state = saveToHistory(state, "Move Polygon Point")
       }
-      return setIn(state, ["mode"], {
+      const newState = setIn(state, ["mode"], {
         mode: "MOVE_POLYGON_POINT",
         regionId: polygon.id,
         pointIndex,
-      })
+      });
+      newState.onChange(newState, action); // RFAVAS
+      return newState;
     }
     case "BEGIN_MOVE_KEYPOINT": {
       const { region, keypointId } = action
@@ -790,20 +794,22 @@ export default (state: MainLayoutState, action: Action) => {
     case "DELETE_REGION": {
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
-      state.onChange(state, action); // RFAVAS
-      return setIn(
+      const newState = setIn(
         state,
         [...pathToActiveImage, "regions"],
         (activeImage.regions || []).filter((r) => r.id !== action.region.id)
       )
+      newState.onChange(newState); // RFAVAS
+      return newState;
     }
     case "DELETE_SELECTED_REGION": {
-      state.onChange(state, action); // RFAVAS
-      return setIn(
+      const newState = setIn(
         state,
         [...pathToActiveImage, "regions"],
         (activeImage.regions || []).filter((r) => !r.highlighted)
       )
+      state.onChange(state, action); // RFAVAS
+      return newState;
     }
     case "HEADER_BUTTON_CLICKED": {
       const buttonName = action.buttonName.toLowerCase()
