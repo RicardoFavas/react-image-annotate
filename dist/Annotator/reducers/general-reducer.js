@@ -66,6 +66,7 @@ export default (function (state, action) {
     if (obj !== null) {
       return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", regionIndex]), _objectSpread({}, region, obj));
     } else {
+      // delete region
       var regions = activeImage.regions;
       return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (regions || []).filter(function (r) {
         return r.id !== region.id;
@@ -111,6 +112,7 @@ export default (function (state, action) {
       }
     case "CHANGE_REGION":
       {
+        state.onChange(state, action); // RFAVAS
         var regionIndex = getRegionIndex(action.region);
         if (regionIndex === null) return state;
         var oldRegion = activeImage.regions[regionIndex];
@@ -193,6 +195,7 @@ export default (function (state, action) {
           pointIndex = action.pointIndex;
         state = closeEditors(state);
         if (state.mode && state.mode.mode === "DRAW_POLYGON" && pointIndex === 0) {
+          state.onChange(state, action); // RFAVAS
           return setIn(modifyRegion(polygon, {
             points: polygon.points.slice(0, -1),
             open: false
@@ -675,11 +678,12 @@ export default (function (state, action) {
           case "RESIZE_BOX":
             {
               if (state.mode.isNew) {
+                // if size < 0.002 dont create region
                 if (Math.abs(state.mode.original.x - _x2) < 0.002 || Math.abs(state.mode.original.y - _y2) < 0.002) {
-                  state.onChange(state);
                   return setIn(modifyRegion(state.mode.regionId, null), ["mode"], null);
                 }
               }
+              state.onChange(state, action); // RFAVAS
               if (state.mode.editLabelEditorAfter) {
                 return _objectSpread({}, modifyRegion(state.mode.regionId, {
                   editingLabels: true
@@ -692,18 +696,21 @@ export default (function (state, action) {
           case "RESIZE_KEYPOINTS":
           case "MOVE_POLYGON_POINT":
             {
+              state.onChange(state, action); // RFAVAS
               return _objectSpread({}, state, {
                 mode: null
               });
             }
           case "MOVE_KEYPOINT":
             {
+              state.onChange(state, action); // RFAVAS
               return _objectSpread({}, state, {
                 mode: null
               });
             }
           case "CREATE_POINT_LINE":
             {
+              state.onChange(state, action); // RFAVAS
               return state;
             }
           case "DRAW_EXPANDING_LINE":
@@ -770,12 +777,14 @@ export default (function (state, action) {
       {
         var _regionIndex18 = getRegionIndex(action.region);
         if (_regionIndex18 === null) return state;
+        state.onChange(state, action); // RFAVAS
         return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (activeImage.regions || []).filter(function (r) {
           return r.id !== action.region.id;
         }));
       }
     case "DELETE_SELECTED_REGION":
       {
+        state.onChange(state, action); // RFAVAS
         return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (activeImage.regions || []).filter(function (r) {
           return !r.highlighted;
         }));

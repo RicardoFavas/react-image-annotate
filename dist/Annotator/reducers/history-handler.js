@@ -17,13 +17,12 @@ export var saveToHistory = function saveToHistory(state, name) {
 };
 export default (function (reducer) {
   return function (state, action) {
-    console.log('ai', state, action)
-
     var prevState = state;
     var nextState = reducer(state, action);
     if (action.type === "RESTORE_HISTORY") {
       if (state.history.length > 0) {
         nextState = setIn(nextState.history[0].state, ["history"], nextState.history.slice(1));
+        state.onChange(nextState); // RFAVAS
         return nextState;
       }
     } else {
