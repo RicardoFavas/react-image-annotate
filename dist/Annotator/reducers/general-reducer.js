@@ -112,7 +112,6 @@ export default (function (state, action) {
       }
     case "CHANGE_REGION":
       {
-        state.onChange(state, action); // RFAVAS
         var regionIndex = getRegionIndex(action.region);
         if (regionIndex === null) return state;
         var oldRegion = activeImage.regions[regionIndex];
@@ -130,7 +129,9 @@ export default (function (state, action) {
         if (!isEqual(oldRegion.comment, action.region.comment)) {
           state = saveToHistory(state, "Change Region Comment");
         }
-        return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", regionIndex]), action.region);
+        var _newState = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", regionIndex]), action.region);
+        _newState.onChange(_newState, action); // RFAVAS
+        return _newState;
       }
     case "CHANGE_IMAGE":
       {
@@ -195,19 +196,22 @@ export default (function (state, action) {
           pointIndex = action.pointIndex;
         state = closeEditors(state);
         if (state.mode && state.mode.mode === "DRAW_POLYGON" && pointIndex === 0) {
-          state.onChange(state, action); // RFAVAS
-          return setIn(modifyRegion(polygon, {
+          var _newState3 = setIn(modifyRegion(polygon, {
             points: polygon.points.slice(0, -1),
             open: false
           }), ["mode"], null);
+          _newState3.onChange(_newState3, action); // RFAVAS
+          return _newState3;
         } else {
           state = saveToHistory(state, "Move Polygon Point");
         }
-        return setIn(state, ["mode"], {
+        var _newState2 = setIn(state, ["mode"], {
           mode: "MOVE_POLYGON_POINT",
           regionId: polygon.id,
           pointIndex: pointIndex
         });
+        _newState2.onChange(_newState2, action); // RFAVAS
+        return _newState2;
       }
     case "BEGIN_MOVE_KEYPOINT":
       {
@@ -385,11 +389,11 @@ export default (function (state, action) {
                 var lastPoint = expandingLine.points.slice(-1)[0];
                 var mouseDistFromLastPoint = Math.sqrt(Math.pow(lastPoint.x - x, 2) + Math.pow(lastPoint.y - y, 2));
                 if (mouseDistFromLastPoint < 0.002 && !lastPoint.width) return state;
-                var _newState = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", _regionIndex9, "points"]), expandingLine.points.slice(0, -1).concat([_objectSpread({}, lastPoint, {
+                var _newState4 = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", _regionIndex9, "points"]), expandingLine.points.slice(0, -1).concat([_objectSpread({}, lastPoint, {
                   width: mouseDistFromLastPoint * 2,
                   angle: Math.atan2(lastPoint.x - x, lastPoint.y - y)
                 })]));
-                return _newState;
+                return _newState4;
               } else {
                 // If mouse is up, move the next candidate point
                 return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", _regionIndex9]), _objectSpread({}, expandingLine, {
@@ -777,17 +781,19 @@ export default (function (state, action) {
       {
         var _regionIndex18 = getRegionIndex(action.region);
         if (_regionIndex18 === null) return state;
-        state.onChange(state, action); // RFAVAS
-        return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (activeImage.regions || []).filter(function (r) {
+        var _newState5 = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (activeImage.regions || []).filter(function (r) {
           return r.id !== action.region.id;
         }));
+        _newState5.onChange(_newState5); // RFAVAS
+        return _newState5;
       }
     case "DELETE_SELECTED_REGION":
       {
-        state.onChange(state, action); // RFAVAS
-        return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (activeImage.regions || []).filter(function (r) {
+        var _newState6 = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (activeImage.regions || []).filter(function (r) {
           return !r.highlighted;
         }));
+        state.onChange(state, action); // RFAVAS
+        return _newState6;
       }
     case "HEADER_BUTTON_CLICKED":
       {
