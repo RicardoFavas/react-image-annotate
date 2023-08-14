@@ -35,6 +35,7 @@ export default (reducer) => {
           ["history"],
           nextState.history.slice(1)
         );
+        state.onChange(nextState); // RFAVAS
         return nextState;
       }
     } else {
