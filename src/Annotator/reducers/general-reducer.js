@@ -150,6 +150,7 @@ export default (state: MainLayoutState, action: Action) => {
         action.region
       )
       newState.onChange(newState, action); // RFAVAS
+
       return newState;
     }
     case "CHANGE_IMAGE": {
@@ -455,7 +456,6 @@ export default (state: MainLayoutState, action: Action) => {
       const { x, y } = action
 
       state = setIn(state, ["mouseDownAt"], { x, y })
-
       if (state.mode) {
         switch (state.mode.mode) {
           case "DRAW_POLYGON": {
@@ -667,12 +667,18 @@ export default (state: MainLayoutState, action: Action) => {
         default:
           break
       }
-
+      
       const regions = [...(getIn(state, pathToActiveImage).regions || [])]
         .map((r) =>
           setIn(r, ["editingLabels"], false).setIn(["highlighted"], false)
         )
         .concat(newRegion ? [newRegion] : [])
+
+      if (typeof state.maxRegions === 'number') { // RFAVAS
+        while (regions.length > state.maxRegions) {
+          regions.shift()
+        }
+      }
 
       return setIn(state, [...pathToActiveImage, "regions"], regions)
     }
@@ -680,8 +686,11 @@ export default (state: MainLayoutState, action: Action) => {
       const { x, y } = action
 
       const { mouseDownAt = { x, y } } = state
-      if (!state.mode) return state
+      if (!state.mode) {
+        return state
+      }
       state = setIn(state, ["mouseDownAt"], null)
+
       switch (state.mode.mode) {
         case "RESIZE_BOX": {
           if (state.mode.isNew) { // if size < 0.002 dont create region

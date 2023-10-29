@@ -37,8 +37,9 @@ type Props = {
   showPointDistances?: boolean,
   pointDistancePrecision?: number,
   RegionEditLabel?: Node,
-  onChange?: (MainLayoutState) => any,
-  onExit: (MainLayoutState) => any,
+  onChange?: (MainLayoutState) => any, // RFAVAS
+  maxRegions?: number, // RFAVAS
+  onExit: (MainLayoutState) => any, 
   videoTime?: number,
   videoSrc?: string,
   keyframes?: Object,
@@ -86,7 +87,8 @@ export const Annotator = ({
   videoSrc,
   videoTime = 0,
   videoName,
-  onChange,
+  onChange, // RFAVAS
+  maxRegions, // RFAVAS
   onExit,
   onNextImage,
   onPrevImage,
@@ -134,7 +136,8 @@ export const Annotator = ({
       imageTagList,
       currentVideoTime: videoTime,
       enabledTools,
-      onChange,
+      onChange, // RFAVAS
+      maxRegions, // RFAVAS
       history: [],
       videoName,
       keypointDefinitions,
