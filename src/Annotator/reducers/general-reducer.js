@@ -13,7 +13,9 @@ import clamp from "clamp"
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform"
 import setInLocalStorage from "../../utils/set-in-local-storage"
 
-const getRandomId = () => Math.random().toString().split(".")[1]
+const getRandomId = () => {
+  return crypto.randomUUID();
+}
 
 export default (state: MainLayoutState, action: Action) => {
   if (
