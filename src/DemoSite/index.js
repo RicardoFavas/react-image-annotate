@@ -10,32 +10,23 @@ export default () => {
   const [annotatorProps, changeAnnotatorProps] = useState(examples["Custom"]())
   const [lastOutput, changeLastOutput] = useState()
 
+
   return (
     <div>
-      {annotatorOpen ? (
-        <ErrorBoundaryDialog
-          onClose={() => {
-            changeAnnotatorOpen(false)
-          }}
-        >
-          <Annotator
-            {...(annotatorProps: any)}
-            onExit={(output) => {
-              delete (output: any)["lastAction"]
-              changeLastOutput(output)
-              changeAnnotatorOpen(false)
-            }}
-          />
-        </ErrorBoundaryDialog>
-      ) : (
-        <Editor
-          lastOutput={lastOutput}
-          onOpenAnnotator={(props) => {
-            changeAnnotatorProps(props)
-            changeAnnotatorOpen(true)
-          }}
-        />
-      )}
+      <Annotator // RFAVAS
+        onChange={(state, action) => {
+          console.log('onChange', state)
+        }}
+
+        maxRegions={6}
+
+        images={[
+          {
+            src: "https://images.unsplash.com/photo-1496905583330-eb54c7e5915a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80",
+            name: "hot-dogs-1",
+          }
+        ]}
+      />
     </div>
   )
 }
