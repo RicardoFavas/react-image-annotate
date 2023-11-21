@@ -25,6 +25,7 @@ export default (function (reducer) {
         if (typeof state.onChange === 'function') {
           state.onChange(nextState); // RFAVAS
         }
+
         return nextState;
       }
     } else {

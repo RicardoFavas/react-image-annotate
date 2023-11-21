@@ -44,6 +44,7 @@ export var Annotator = function Annotator(_ref) {
     videoTime = _ref$videoTime === void 0 ? 0 : _ref$videoTime,
     videoName = _ref.videoName,
     onChange = _ref.onChange,
+    maxRegions = _ref.maxRegions,
     onExit = _ref.onExit,
     onNextImage = _ref.onNextImage,
     onPrevImage = _ref.onPrevImage,
@@ -88,6 +89,9 @@ export var Annotator = function Annotator(_ref) {
       currentVideoTime: videoTime,
       enabledTools: enabledTools,
       onChange: onChange,
+      // RFAVAS
+      maxRegions: maxRegions,
+      // RFAVAS
       history: [],
       videoName: videoName,
       keypointDefinitions: keypointDefinitions,

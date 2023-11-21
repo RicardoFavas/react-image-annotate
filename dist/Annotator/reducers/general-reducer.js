@@ -13,7 +13,6 @@ import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon";
 import clamp from "clamp";
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform";
 import setInLocalStorage from "../../utils/set-in-local-storage";
-import crypto from 'crypto';
 var getRandomId = function getRandomId() {
   return crypto.randomUUID();
 };
@@ -131,7 +130,9 @@ export default (function (state, action) {
           state = saveToHistory(state, "Change Region Comment");
         }
         var _newState = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", regionIndex]), action.region);
-        _newState.onChange(_newState, action); // RFAVAS
+        if (typeof _newState.onChange === 'function') {
+          _newState.onChange(_newState, action); // RFAVAS
+        }
 
         return _newState;
       }
@@ -202,7 +203,10 @@ export default (function (state, action) {
             points: polygon.points.slice(0, -1),
             open: false
           }), ["mode"], null);
-          _newState3.onChange(_newState3, action); // RFAVAS
+          if (typeof _newState3.onChange === 'function') {
+            _newState3.onChange(_newState3, action); // RFAVAS
+          }
+
           return _newState3;
         } else {
           state = saveToHistory(state, "Move Polygon Point");
@@ -212,7 +216,10 @@ export default (function (state, action) {
           regionId: polygon.id,
           pointIndex: pointIndex
         });
-        _newState2.onChange(_newState2, action); // RFAVAS
+        if (typeof _newState2.onChange === 'function') {
+          _newState2.onChange(_newState2, action); // RFAVAS
+        }
+
         return _newState2;
       }
     case "BEGIN_MOVE_KEYPOINT":
@@ -697,7 +704,10 @@ export default (function (state, action) {
                   return setIn(modifyRegion(state.mode.regionId, null), ["mode"], null);
                 }
               }
-              state.onChange(state, action); // RFAVAS
+              if (typeof state.onChange === 'function') {
+                state.onChange(state, action); // RFAVAS
+              }
+
               if (state.mode.editLabelEditorAfter) {
                 return _objectSpread({}, modifyRegion(state.mode.regionId, {
                   editingLabels: true
@@ -710,21 +720,30 @@ export default (function (state, action) {
           case "RESIZE_KEYPOINTS":
           case "MOVE_POLYGON_POINT":
             {
-              state.onChange(state, action); // RFAVAS
+              if (typeof state.onChange === 'function') {
+                state.onChange(state, action); // RFAVAS
+              }
+
               return _objectSpread({}, state, {
                 mode: null
               });
             }
           case "MOVE_KEYPOINT":
             {
-              state.onChange(state, action); // RFAVAS
+              if (typeof state.onChange === 'function') {
+                state.onChange(state, action); // RFAVAS
+              }
+
               return _objectSpread({}, state, {
                 mode: null
               });
             }
           case "CREATE_POINT_LINE":
             {
-              state.onChange(state, action); // RFAVAS
+              if (typeof state.onChange === 'function') {
+                state.onChange(state, action); // RFAVAS
+              }
+
               return state;
             }
           case "DRAW_EXPANDING_LINE":
@@ -794,7 +813,10 @@ export default (function (state, action) {
         var _newState5 = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (activeImage.regions || []).filter(function (r) {
           return r.id !== action.region.id;
         }));
-        _newState5.onChange(_newState5); // RFAVAS
+        if (typeof _newState5.onChange === 'function') {
+          _newState5.onChange(_newState5); // RFAVAS
+        }
+
         return _newState5;
       }
     case "DELETE_SELECTED_REGION":
@@ -802,7 +824,10 @@ export default (function (state, action) {
         var _newState6 = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), (activeImage.regions || []).filter(function (r) {
           return !r.highlighted;
         }));
-        state.onChange(state, action); // RFAVAS
+        if (typeof state.onChange === 'function') {
+          state.onChange(state, action); // RFAVAS
+        }
+
         return _newState6;
       }
     case "HEADER_BUTTON_CLICKED":
