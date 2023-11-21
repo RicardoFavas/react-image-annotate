@@ -13,8 +13,9 @@ import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon";
 import clamp from "clamp";
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform";
 import setInLocalStorage from "../../utils/set-in-local-storage";
+import crypto from 'crypto';
 var getRandomId = function getRandomId() {
-  return Math.random().toString().split(".")[1];
+  return crypto.randomUUID();
 };
 export default (function (state, action) {
   if (state.allowedArea && state.selectedTool !== "modify-allowed-area" && ["MOUSE_DOWN", "MOUSE_UP", "MOUSE_MOVE"].includes(action.type)) {
@@ -131,6 +132,7 @@ export default (function (state, action) {
         }
         var _newState = setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions", regionIndex]), action.region);
         _newState.onChange(_newState, action); // RFAVAS
+
         return _newState;
       }
     case "CHANGE_IMAGE":
@@ -664,6 +666,12 @@ export default (function (state, action) {
         var _regions = _toConsumableArray(getIn(state, pathToActiveImage).regions || []).map(function (r) {
           return setIn(r, ["editingLabels"], false).setIn(["highlighted"], false);
         }).concat(newRegion ? [newRegion] : []);
+        if (typeof state.maxRegions === 'number') {
+          // RFAVAS
+          while (_regions.length > state.maxRegions) {
+            _regions.shift();
+          }
+        }
         return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), _regions);
       }
     case "MOUSE_UP":
@@ -676,7 +684,9 @@ export default (function (state, action) {
             x: _x2,
             y: _y2
           } : _state4$mouseDownAt;
-        if (!state.mode) return state;
+        if (!state.mode) {
+          return state;
+        }
         state = setIn(state, ["mouseDownAt"], null);
         switch (state.mode.mode) {
           case "RESIZE_BOX":

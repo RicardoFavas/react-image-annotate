@@ -22,7 +22,9 @@ export default (function (reducer) {
     if (action.type === "RESTORE_HISTORY") {
       if (state.history.length > 0) {
         nextState = setIn(nextState.history[0].state, ["history"], nextState.history.slice(1));
-        state.onChange(nextState); // RFAVAS
+        if (typeof state.onChange === 'function') {
+          state.onChange(nextState); // RFAVAS
+        }
         return nextState;
       }
     } else {

@@ -151,7 +151,9 @@ export default (state: MainLayoutState, action: Action) => {
         [...pathToActiveImage, "regions", regionIndex],
         action.region
       )
-      newState.onChange(newState, action); // RFAVAS
+      if (typeof newState.onChange === 'function') {
+        newState.onChange(newState, action); // RFAVAS
+      }
 
       return newState;
     }
@@ -213,7 +215,9 @@ export default (state: MainLayoutState, action: Action) => {
           ["mode"],
           null
         )
-        newState.onChange(newState, action); // RFAVAS
+        if (typeof newState.onChange === 'function') {
+          newState.onChange(newState, action); // RFAVAS
+        }
         return newState;
       } else {
         state = saveToHistory(state, "Move Polygon Point")
@@ -223,7 +227,9 @@ export default (state: MainLayoutState, action: Action) => {
         regionId: polygon.id,
         pointIndex,
       });
-      newState.onChange(newState, action); // RFAVAS
+      if (typeof newState.onChange === 'function') {
+        newState.onChange(newState, action); // RFAVAS
+      }
       return newState;
     }
     case "BEGIN_MOVE_KEYPOINT": {
@@ -707,7 +713,9 @@ export default (state: MainLayoutState, action: Action) => {
               )
             }
           }
-          state.onChange(state, action); // RFAVAS
+          if (typeof state.onChange === 'function') {
+            state.onChange(state, action); // RFAVAS
+          }
           if (state.mode.editLabelEditorAfter) {
             return {
               ...modifyRegion(state.mode.regionId, { editingLabels: true }),
@@ -718,15 +726,21 @@ export default (state: MainLayoutState, action: Action) => {
         case "MOVE_REGION":
         case "RESIZE_KEYPOINTS":
         case "MOVE_POLYGON_POINT": {
-          state.onChange(state, action); // RFAVAS
+          if (typeof state.onChange === 'function') {
+            state.onChange(state, action); // RFAVAS
+          }
           return { ...state, mode: null }
         }
         case "MOVE_KEYPOINT": {
-          state.onChange(state, action); // RFAVAS
+          if (typeof state.onChange === 'function') {
+            state.onChange(state, action); // RFAVAS
+          }
           return { ...state, mode: null }
         }
         case "CREATE_POINT_LINE": {
-          state.onChange(state, action); // RFAVAS
+          if (typeof state.onChange === 'function') {
+            state.onChange(state, action); // RFAVAS
+          }
           return state
         }
         case "DRAW_EXPANDING_LINE": {
@@ -810,7 +824,9 @@ export default (state: MainLayoutState, action: Action) => {
         [...pathToActiveImage, "regions"],
         (activeImage.regions || []).filter((r) => r.id !== action.region.id)
       )
-      newState.onChange(newState); // RFAVAS
+      if (typeof newState.onChange === 'function') {
+        newState.onChange(newState); // RFAVAS
+      }
       return newState;
     }
     case "DELETE_SELECTED_REGION": {
@@ -819,7 +835,9 @@ export default (state: MainLayoutState, action: Action) => {
         [...pathToActiveImage, "regions"],
         (activeImage.regions || []).filter((r) => !r.highlighted)
       )
-      state.onChange(state, action); // RFAVAS
+      if (typeof state.onChange === 'function') {
+        state.onChange(state, action); // RFAVAS
+      }
       return newState;
     }
     case "HEADER_BUTTON_CLICKED": {
