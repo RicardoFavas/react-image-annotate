@@ -12,9 +12,9 @@ import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
 import clamp from "clamp"
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform"
 import setInLocalStorage from "../../utils/set-in-local-storage"
-
+import { v4 as uuidv4 } from 'uuid';
 const getRandomId = () => {
-  return crypto.randomUUID();
+  return uuidv4();
 }
 
 export default (state: MainLayoutState, action: Action) => {
