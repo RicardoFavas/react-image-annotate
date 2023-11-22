@@ -53,6 +53,30 @@ const Number = styled("div")(({ theme }) => ({
   color: muiColors.grey[700],
 }))
 
+// RFAVAS
+const classShortcuts = {
+  0: '1',
+  1: '2',
+  2: '3',
+  3: '4',
+  4: '5',
+  5: '6',
+  6: '7',
+  7: '8',
+  8: '9',
+  9: '0',
+  10: 'q',
+  11: 'w',
+  12: 'e',
+  13: 'r',
+  14: 't',
+  15: 'y',
+  16: 'u',
+  17: 'i',
+  18: 'o',
+  19: 'p',
+}
+
 export const ClassSelectionMenu = ({
   selectedCls,
   regionClsList,
@@ -60,8 +84,10 @@ export const ClassSelectionMenu = ({
 }) => {
   useEffect(() => {
     const keyMapping = {}
-    for (let i = 0; i < 9 && i < regionClsList.length; i++) {
-      keyMapping[i + 1] = () => onSelectCls(regionClsList[i])
+    for (let i = 0; i < regionClsList.length; i++) {
+      if (classShortcuts[i] != null) {
+        keyMapping[classShortcuts[i]] = () => onSelectCls(regionClsList[i])
+      }
     }
     const onKeyDown = (e) => {
       if (keyMapping[e.key]) {
@@ -95,7 +121,7 @@ export const ClassSelectionMenu = ({
             </Label>
             <DashSep />
             <Number className={classnames({ selected: label === selectedCls })}>
-              {index < 9 ? `Key [${index + 1}]` : ""}
+              {classShortcuts[index] != null ? `Key [${classShortcuts[index]}]` : ""}
             </Number>
           </LabelContainer>
         ))}
