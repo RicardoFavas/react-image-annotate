@@ -66,6 +66,30 @@ var Number = styled("div")(function (_ref5) {
     color: muiColors.grey[700]
   };
 });
+
+// RFAVAS
+var classShortcuts = {
+  0: '1',
+  1: '2',
+  2: '3',
+  3: '4',
+  4: '5',
+  5: '6',
+  6: '7',
+  7: '8',
+  8: '9',
+  9: '0',
+  10: 'q',
+  11: 'w',
+  12: 'e',
+  13: 'r',
+  14: 't',
+  15: 'y',
+  16: 'u',
+  17: 'i',
+  18: 'o',
+  19: 'p'
+};
 export var ClassSelectionMenu = function ClassSelectionMenu(_ref6) {
   var selectedCls = _ref6.selectedCls,
     regionClsList = _ref6.regionClsList,
@@ -73,11 +97,13 @@ export var ClassSelectionMenu = function ClassSelectionMenu(_ref6) {
   useEffect(function () {
     var keyMapping = {};
     var _loop = function _loop(i) {
-      keyMapping[i + 1] = function () {
-        return onSelectCls(regionClsList[i]);
-      };
+      if (classShortcuts[i] != null) {
+        keyMapping[classShortcuts[i]] = function () {
+          return onSelectCls(regionClsList[i]);
+        };
+      }
     };
-    for (var i = 0; i < 9 && i < regionClsList.length; i++) {
+    for (var i = 0; i < regionClsList.length; i++) {
       _loop(i);
     }
     var onKeyDown = function onKeyDown(e) {
@@ -123,7 +149,7 @@ export var ClassSelectionMenu = function ClassSelectionMenu(_ref6) {
       className: classnames({
         selected: label === selectedCls
       })
-    }, index < 9 ? "Key [".concat(index + 1, "]") : ""));
+    }, classShortcuts[index] != null ? "Key [".concat(classShortcuts[index], "]") : ""));
   }), /*#__PURE__*/React.createElement(Box, {
     pb: 2
   })));
