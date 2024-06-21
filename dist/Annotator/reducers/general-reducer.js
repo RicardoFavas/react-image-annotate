@@ -13,9 +13,9 @@ import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon";
 import clamp from "clamp";
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform";
 import setInLocalStorage from "../../utils/set-in-local-storage";
-import { v4 as uuidv4 } from 'uuid';
+import { uuidv7 } from "@kripod/uuidv7";
 var getRandomId = function getRandomId() {
-  return uuidv4();
+  return uuidv7();
 };
 export default (function (state, action) {
   if (state.allowedArea && state.selectedTool !== "modify-allowed-area" && ["MOUSE_DOWN", "MOUSE_UP", "MOUSE_MOVE"].includes(action.type)) {

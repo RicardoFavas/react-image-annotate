@@ -55,6 +55,7 @@ const Number = styled("div")(({ theme }) => ({
 
 // RFAVAS
 const classShortcuts = {
+/*
   0: '1',
   1: '2',
   2: '3',
@@ -75,6 +76,7 @@ const classShortcuts = {
   17: 'i',
   18: 'o',
   19: 'p',
+*/
 }
 
 export const ClassSelectionMenu = ({
