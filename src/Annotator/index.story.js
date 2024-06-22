@@ -31,7 +31,6 @@ storiesOf("Annotator", module)
       regionTagList={["tag1", "tag2", "tag3"]}
       imageClsList={["Alpha", "Beta", "Charlie", "Delta"]}
       imageTagList={["tag1", "tag2", "tag3"]}
-      onChange={(state,action) => console.log('onChange', action, state.images[0].regions)}
       images={[
         {
           src: exampleImage,
