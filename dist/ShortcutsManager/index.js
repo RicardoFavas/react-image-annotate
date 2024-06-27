@@ -129,6 +129,22 @@ export var useDispatchHotkeyHandlers = function useDispatchHotkeyHandlers(_ref3)
         dispatch({
           type: "RESTORE_HISTORY"
         });
+      },
+      show_tags: function show_tags() {
+        dispatch({
+          type: "SELECT_TOOL",
+          selectedTool: "show-tags"
+        });
+      },
+      hide_regions: function hide_regions() {
+        dispatch({
+          type: "HIDE_REGIONS"
+        });
+      },
+      lock_regions: function lock_regions() {
+        dispatch({
+          type: "LOCK_REGIONS"
+        });
       }
       // TODO
       // exit_sample: () => {

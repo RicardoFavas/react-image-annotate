@@ -18,6 +18,7 @@ import VisibleOffIcon from "@mui/icons-material/VisibilityOff"
 import styles from "./styles"
 import classnames from "classnames"
 import isEqual from "lodash/isEqual"
+import Tooltip from "@mui/material/Tooltip"
 
 const theme = createTheme()
 const useStyles = makeStyles((theme) => styles)
@@ -84,6 +85,7 @@ const RowLayout = ({
 }
 
 const RowHeader = ({ regions, onChangeRegion }) => {
+  // RFAVAS
   const visible = regions.find(r => r.visible === false) == null;
   const locked = regions.find(r => r.locked === false) == null;
 
@@ -96,46 +98,54 @@ const RowHeader = ({ regions, onChangeRegion }) => {
       area={<PieChartIcon className="icon" />}
       trash={<TrashIcon className="icon" />}
       lock={
-        locked === true ? (
-          <LockIcon
-            onClick={() => {
-              regions.forEach(r => {
-                onChangeRegion({ ...r, locked: false });
-              });
-            }}
-            className="icon"
-          />
-        ) : (
-          <UnlockIcon
-            onClick={() => {
-              regions.forEach(r => {
-                onChangeRegion({ ...r, locked: true });
-              });
-            }}
-            className="icon"
-          />
-        )    
+        <Tooltip title='Lock / Unlock (l)'>
+        {
+          locked === true ? (
+              <LockIcon
+                onClick={() => {
+                  regions.forEach(r => {
+                    onChangeRegion({ ...r, locked: false });
+                  });
+                }}
+                className="icon"
+              />
+          ) : (
+            <UnlockIcon
+              onClick={() => {
+                regions.forEach(r => {
+                  onChangeRegion({ ...r, locked: true });
+                });
+              }}
+              className="icon"
+            />
+          )    
+        }
+        </Tooltip>
       }
       visible={
-          visible ? (
-            <VisibleIcon
-              onClick={() => {
-                regions.forEach(r => {
-                  onChangeRegion({ ...r, visible: false });
-                });
-              }}
-              className="icon"
-            />
-          ) : (
-            <VisibleOffIcon
-              onClick={() => {
-                regions.forEach(r => {
-                  onChangeRegion({ ...r, visible: true });
-                });
-              }}
-              className="icon"
-            />
-          )
+        <Tooltip title='Show / Hide (v)'>
+          {
+            visible ? (
+              <VisibleIcon
+                onClick={() => {
+                  regions.forEach(r => {
+                    onChangeRegion({ ...r, visible: false });
+                  });
+                }}
+                className="icon"
+              />
+            ) : (
+              <VisibleOffIcon
+                onClick={() => {
+                  regions.forEach(r => {
+                    onChangeRegion({ ...r, visible: true });
+                  });
+                }}
+                className="icon"
+              />
+            )
+          }
+        </Tooltip>
       }
     />
   )

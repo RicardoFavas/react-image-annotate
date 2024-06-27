@@ -105,7 +105,7 @@ export const ClassSelectionMenu = ({
   return (
     <ThemeProvider theme={theme}>
       <SidebarBoxContainer
-        title="Classifications"
+        title="Classes" // RFAVAS Classifications -> Classes
         subTitle=""
         icon={<BallotIcon style={{ color: muiColors.grey[700] }} />}
         expandedByDefault

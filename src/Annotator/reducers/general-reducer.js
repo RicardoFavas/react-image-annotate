@@ -951,6 +951,30 @@ export default (state: MainLayoutState, action: Action) => {
       }
       break
     }
+    case "HIDE_REGIONS": {
+      const regions = activeImage.regions
+      const visible = regions.find(r => r.visible === false) == null;
+      return setIn(
+        state,
+        [...pathToActiveImage, "regions"],
+        regions.map((r) => ({
+          ...r,
+          visible: !visible,
+        }))
+      )
+    }
+    case "LOCK_REGIONS": {
+      const regions = activeImage.regions
+      const locked = regions.find(r => r.locked === false) == null;
+      return setIn(
+        state,
+        [...pathToActiveImage, "regions"],
+        regions.map((r) => ({
+          ...r,
+          locked: !locked,
+        }))
+      )
+    }
     default:
       break
   }

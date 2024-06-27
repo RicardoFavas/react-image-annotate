@@ -36,6 +36,17 @@ var theme = createTheme();
 var useStyles = makeStyles(function (theme) {
   return styles;
 });
+var keyMap = {
+  // RFAVAS shortcuts
+  pan_tool: "p",
+  create_polygon: 'p',
+  select_tool: 'q',
+  create_bounding_box: 'b',
+  delete_region: 'del',
+  show_tags: 't',
+  hide_regions: 'v',
+  lock_regions: 'l'
+};
 var HotkeyDiv = withHotKeys(function (_ref) {
   var hotKeys = _ref.hotKeys,
     children = _ref.children,
@@ -212,6 +223,7 @@ export var MainLayout = function MainLayout(_ref3) {
     onMouseOver: refocusOnMouseEvent,
     allowChanges: true,
     handlers: hotkeyHandlers,
+    keyMap: keyMap,
     className: classnames(classes.container, state.fullScreen && "Fullscreen")
   }, /*#__PURE__*/React.createElement(Workspace, {
     allowFullscreen: true,
@@ -262,7 +274,7 @@ export var MainLayout = function MainLayout(_ref3) {
       alwaysShowing: true
     }, {
       name: "show-tags",
-      helperText: "Show / Hide Tags",
+      helperText: "Show / Hide Tags" + getHotkeyHelpText("show_tags"),
       alwaysShowing: true
     }, {
       name: "create-point",

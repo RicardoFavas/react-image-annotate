@@ -38,11 +38,24 @@ const emptyArr = []
 const theme = createTheme()
 const useStyles = makeStyles((theme) => styles)
 
+const keyMap = {
+  // RFAVAS shortcuts
+  pan_tool: "p",
+  create_polygon: 'p',
+  select_tool: 'q',
+  create_bounding_box: 'b',
+  delete_region: 'del',
+  show_tags: 't',
+  hide_regions: 'v',
+  lock_regions: 'l'
+};
+
 const HotkeyDiv = withHotKeys(({ hotKeys, children, divRef, ...props }) => (
   <div {...{ ...hotKeys, ...props }} ref={divRef}>
     {children}
   </div>
 ))
+
 
 const FullScreenContainer = styled("div")(({ theme }) => ({
   width: "100%",
@@ -236,6 +249,7 @@ export const MainLayout = ({
             onMouseOver={refocusOnMouseEvent}
             allowChanges
             handlers={hotkeyHandlers}
+            keyMap={keyMap}
             className={classnames(
               classes.container,
               state.fullScreen && "Fullscreen"
@@ -304,7 +318,7 @@ export const MainLayout = ({
                 },
                 {
                   name: "show-tags",
-                  helperText: "Show / Hide Tags",
+                  helperText: "Show / Hide Tags"  + getHotkeyHelpText("show_tags"),
                   alwaysShowing: true,
                 },
                 {

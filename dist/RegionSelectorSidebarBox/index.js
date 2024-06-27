@@ -18,6 +18,7 @@ import VisibleOffIcon from "@mui/icons-material/VisibilityOff";
 import styles from "./styles";
 import classnames from "classnames";
 import isEqual from "lodash/isEqual";
+import Tooltip from "@mui/material/Tooltip";
 var theme = createTheme();
 var useStyles = makeStyles(function (theme) {
   return styles;
@@ -109,6 +110,7 @@ var RowLayout = function RowLayout(_ref3) {
 var RowHeader = function RowHeader(_ref4) {
   var regions = _ref4.regions,
     onChangeRegion = _ref4.onChangeRegion;
+  // RFAVAS
   var visible = regions.find(function (r) {
     return r.visible === false;
   }) == null;
@@ -132,7 +134,9 @@ var RowHeader = function RowHeader(_ref4) {
     trash: /*#__PURE__*/React.createElement(TrashIcon, {
       className: "icon"
     }),
-    lock: locked === true ? /*#__PURE__*/React.createElement(LockIcon, {
+    lock: /*#__PURE__*/React.createElement(Tooltip, {
+      title: "Lock / Unlock (l)"
+    }, locked === true ? /*#__PURE__*/React.createElement(LockIcon, {
       onClick: function onClick() {
         regions.forEach(function (r) {
           onChangeRegion(_objectSpread({}, r, {
@@ -150,8 +154,10 @@ var RowHeader = function RowHeader(_ref4) {
         });
       },
       className: "icon"
-    }),
-    visible: visible ? /*#__PURE__*/React.createElement(VisibleIcon, {
+    })),
+    visible: /*#__PURE__*/React.createElement(Tooltip, {
+      title: "Show / Hide (v)"
+    }, visible ? /*#__PURE__*/React.createElement(VisibleIcon, {
       onClick: function onClick() {
         regions.forEach(function (r) {
           onChangeRegion(_objectSpread({}, r, {
@@ -169,7 +175,7 @@ var RowHeader = function RowHeader(_ref4) {
         });
       },
       className: "icon"
-    })
+    }))
   });
 };
 var MemoRowHeader = memo(RowHeader);

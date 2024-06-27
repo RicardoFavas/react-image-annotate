@@ -944,6 +944,30 @@ export default (function (state, action) {
         }
         break;
       }
+    case "HIDE_REGIONS":
+      {
+        var _regions3 = activeImage.regions;
+        var visible = _regions3.find(function (r) {
+          return r.visible === false;
+        }) == null;
+        return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), _regions3.map(function (r) {
+          return _objectSpread({}, r, {
+            visible: !visible
+          });
+        }));
+      }
+    case "LOCK_REGIONS":
+      {
+        var _regions4 = activeImage.regions;
+        var locked = _regions4.find(function (r) {
+          return r.locked === false;
+        }) == null;
+        return setIn(state, [].concat(_toConsumableArray(pathToActiveImage), ["regions"]), _regions4.map(function (r) {
+          return _objectSpread({}, r, {
+            locked: !locked
+          });
+        }));
+      }
     default:
       break;
   }

@@ -140,6 +140,22 @@ export const useDispatchHotkeyHandlers = ({ dispatch }) => {
           type: "RESTORE_HISTORY",
         })
       },
+      show_tags: () => {
+        dispatch({
+          type: "SELECT_TOOL",
+          selectedTool: "show-tags",
+        })
+      },
+      hide_regions: () => {
+        dispatch({
+          type: "HIDE_REGIONS",
+        })
+      },
+      lock_regions: () => {
+        dispatch({
+          type: "LOCK_REGIONS",
+        })
+      },
       // TODO
       // exit_sample: () => {
       //   dispatch({

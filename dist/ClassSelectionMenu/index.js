@@ -123,7 +123,8 @@ export var ClassSelectionMenu = function ClassSelectionMenu(_ref6) {
   return /*#__PURE__*/React.createElement(ThemeProvider, {
     theme: theme
   }, /*#__PURE__*/React.createElement(SidebarBoxContainer, {
-    title: "Classifications",
+    title: "Classes" // RFAVAS Classifications -> Classes
+    ,
     subTitle: "",
     icon: /*#__PURE__*/React.createElement(BallotIcon, {
       style: {
