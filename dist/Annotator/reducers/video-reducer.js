@@ -48,6 +48,7 @@ export default (function (state, action) {
       case "BEGIN_MOVE_POINT":
       case "BEGIN_MOVE_KEYPOINT":
       case "BEGIN_MOVE_POLYGON_POINT":
+      case "BEGIN_MOVE_LINE_POINT":
       case "ADD_POLYGON_POINT":
       case "SELECT_REGION":
       case "CHANGE_REGION":

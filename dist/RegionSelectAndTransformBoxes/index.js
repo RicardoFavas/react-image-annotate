@@ -35,6 +35,7 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
     mat = _ref2.mat,
     onBeginBoxTransform = _ref2.onBeginBoxTransform,
     onBeginMovePolygonPoint = _ref2.onBeginMovePolygonPoint,
+    onBeginMoveLinePoint = _ref2.onBeginMoveLinePoint,
     onBeginMoveKeypoint = _ref2.onBeginMoveKeypoint,
     onAddPolygonPoint = _ref2.onAddPolygonPoint,
     showHighlightBox = _ref2.showHighlightBox;
@@ -44,7 +45,7 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
     ih = _layoutParams$current.ih;
   return /*#__PURE__*/React.createElement(ThemeProvider, {
     theme: theme
-  }, /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(PreventScrollToParents, null, showHighlightBox && r.type !== "polygon" && /*#__PURE__*/React.createElement(HighlightBox, {
+  }, /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(PreventScrollToParents, null, showHighlightBox && r.type !== "polygon" && r.type !== "line" && /*#__PURE__*/React.createElement(HighlightBox, {
     region: r,
     mouseEvents: mouseEvents,
     dragWithPrimary: dragWithPrimary,
@@ -141,6 +142,27 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
         top: proj.y - 4
       }
     })));
+  }),
+  // RF LINE
+  r.type === "line" && !dragWithPrimary && !zoomWithPrimary && !r.locked && r.highlighted && [[r.x1, r.y1], [r.x2, r.y2]].map(function (_ref11, i) {
+    var _ref12 = _slicedToArray(_ref11, 2),
+      x = _ref12[0],
+      y = _ref12[1];
+    var proj = mat.clone().inverse().applyToPoint(x * iw, y * ih);
+    return /*#__PURE__*/React.createElement(TransformGrabber, Object.assign({
+      key: i
+    }, mouseEvents, {
+      onMouseDown: function onMouseDown(e) {
+        if (e.button === 0 && (!r.open || i === 0)) return onBeginMoveLinePoint(r, i);
+        mouseEvents.onMouseDown(e);
+      },
+      style: {
+        cursor: "move",
+        zIndex: 10,
+        left: proj.x - 4,
+        top: proj.y - 4
+      }
+    }));
   }))));
 }, arePropsEqual);
 export var RegionSelectAndTransformBoxes = memo(function (props) {
