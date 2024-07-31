@@ -190,6 +190,11 @@ export const MainLayout = ({
         "polygon",
         "pointIndex"
       )}
+      onBeginMoveLinePoint={action(
+        "BEGIN_MOVE_LINE_POINT",
+        "line",
+        "pointIndex"
+      )}
       onBeginMoveKeypoint={action(
         "BEGIN_MOVE_KEYPOINT",
         "region",

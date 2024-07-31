@@ -45,6 +45,7 @@ export const RegionSelectAndTransformBox = memo(
     mat,
     onBeginBoxTransform,
     onBeginMovePolygonPoint,
+    onBeginMoveLinePoint,
     onBeginMoveKeypoint,
     onAddPolygonPoint,
     showHighlightBox,
@@ -55,7 +56,7 @@ export const RegionSelectAndTransformBox = memo(
       <ThemeProvider theme={theme}>
         <Fragment>
           <PreventScrollToParents>
-            {showHighlightBox && r.type !== "polygon" && (
+            {showHighlightBox && r.type !== "polygon" && r.type !== "line" && (
               <HighlightBox
                 region={r}
                 mouseEvents={mouseEvents}
@@ -211,6 +212,36 @@ export const RegionSelectAndTransformBox = memo(
                   )
                 }
               )}
+            { // RF LINE
+              r.type === "line" && 
+              !dragWithPrimary &&
+              !zoomWithPrimary &&
+              !r.locked &&
+              r.highlighted &&
+              [[r.x1, r.y1], [r.x2, r.y2]].map(([x, y], i) => {
+                const proj = mat
+                  .clone()
+                  .inverse()
+                  .applyToPoint(x * iw, y * ih)
+                return (
+                  <TransformGrabber
+                    key={i}
+                    {...mouseEvents}
+                    onMouseDown={(e) => {
+                      if (e.button === 0 && (!r.open || i === 0))
+                        return onBeginMoveLinePoint(r, i)
+                      mouseEvents.onMouseDown(e)
+                    }}
+                    style={{
+                      cursor: "move",
+                      zIndex: 10,
+                      left: proj.x - 4,
+                      top: proj.y - 4,
+                    }}
+                  />
+                )
+              })
+            }
           </PreventScrollToParents>
         </Fragment>
       </ThemeProvider>

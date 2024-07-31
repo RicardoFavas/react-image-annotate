@@ -75,6 +75,7 @@ type Props = {
   onDeleteRegion: (Region) => any,
   onBeginBoxTransform: (Box, [number, number]) => any,
   onBeginMovePolygonPoint: (Polygon, index: number) => any,
+  onBeginMoveLinePoint: (Line, index: number) => any,
   onBeginMoveKeypoint: (Keypoints, index: number) => any,
   onAddPolygonPoint: (Polygon, point: [number, number], index: number) => any,
   onSelectRegion: (Region) => any,
@@ -130,6 +131,7 @@ export const ImageCanvas = ({
   onCloseRegionEdit,
   onBeginBoxTransform,
   onBeginMovePolygonPoint,
+  onBeginMoveLinePoint,
   onAddPolygonPoint,
   onBeginMoveKeypoint,
   onSelectRegion,
@@ -372,6 +374,7 @@ export const ImageCanvas = ({
             mat={mat}
             onBeginBoxTransform={onBeginBoxTransform}
             onBeginMovePolygonPoint={onBeginMovePolygonPoint}
+            onBeginMoveLinePoint={onBeginMoveLinePoint}
             onBeginMoveKeypoint={onBeginMoveKeypoint}
             onAddPolygonPoint={onAddPolygonPoint}
             showHighlightBox={showHighlightBox}
