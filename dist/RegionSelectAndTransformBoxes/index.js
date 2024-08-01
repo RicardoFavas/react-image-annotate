@@ -36,6 +36,7 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
     onBeginBoxTransform = _ref2.onBeginBoxTransform,
     onBeginMovePolygonPoint = _ref2.onBeginMovePolygonPoint,
     onBeginMoveLinePoint = _ref2.onBeginMoveLinePoint,
+    onBeginMoveLine = _ref2.onBeginMoveLine,
     onBeginMoveKeypoint = _ref2.onBeginMoveKeypoint,
     onAddPolygonPoint = _ref2.onAddPolygonPoint,
     showHighlightBox = _ref2.showHighlightBox;
@@ -144,7 +145,7 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
     })));
   }),
   // RF LINE
-  r.type === "line" && !dragWithPrimary && !zoomWithPrimary && !r.locked && r.highlighted && [[r.x1, r.y1], [r.x2, r.y2]].map(function (_ref11, i) {
+  r.type === "line" && !dragWithPrimary && !zoomWithPrimary && !r.locked && r.highlighted && mat.a < 1.2 && [[r.x1, r.y1], [r.x2, r.y2], [(r.x1 + r.x2) / 2.0, (r.y1 + r.y2) / 2.0]].map(function (_ref11, i) {
     var _ref12 = _slicedToArray(_ref11, 2),
       x = _ref12[0],
       y = _ref12[1];
@@ -153,14 +154,16 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
       key: i
     }, mouseEvents, {
       onMouseDown: function onMouseDown(e) {
-        if (e.button === 0 && (!r.open || i === 0)) return onBeginMoveLinePoint(r, i);
+        if (e.button === 0 && !r.open && (i === 0 || i === 1)) return onBeginMoveLinePoint(r, i);
+        if (e.button === 0 && !r.open && i === 2) return onBeginMoveLine(r);
         mouseEvents.onMouseDown(e);
       },
       style: {
-        cursor: "move",
+        cursor: i === 2 ? "grab" : "move",
+        borderRadius: i === 2 ? 4 : undefined,
         zIndex: 10,
-        left: proj.x - 4,
-        top: proj.y - 4
+        left: proj.x - 6,
+        top: proj.y - 6
       }
     }));
   }))));

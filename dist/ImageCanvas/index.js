@@ -86,6 +86,7 @@ export var ImageCanvas = function ImageCanvas(_ref2) {
     onBeginBoxTransform = _ref2.onBeginBoxTransform,
     onBeginMovePolygonPoint = _ref2.onBeginMovePolygonPoint,
     onBeginMoveLinePoint = _ref2.onBeginMoveLinePoint,
+    onBeginMoveLine = _ref2.onBeginMoveLine,
     onAddPolygonPoint = _ref2.onAddPolygonPoint,
     onBeginMoveKeypoint = _ref2.onBeginMoveKeypoint,
     onSelectRegion = _ref2.onSelectRegion,
@@ -311,6 +312,7 @@ export var ImageCanvas = function ImageCanvas(_ref2) {
     onBeginBoxTransform: onBeginBoxTransform,
     onBeginMovePolygonPoint: onBeginMovePolygonPoint,
     onBeginMoveLinePoint: onBeginMoveLinePoint,
+    onBeginMoveLine: onBeginMoveLine,
     onBeginMoveKeypoint: onBeginMoveKeypoint,
     onAddPolygonPoint: onAddPolygonPoint,
     showHighlightBox: showHighlightBox

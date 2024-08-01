@@ -22,6 +22,7 @@
     "react-dom": "^18.2.0",
     "react-full-screen": "^0.3.1",
     "react-hotkeys": "^2.0.0",
+    "react-icons": "^5.2.1",
     "react-markdown": "^4.0.6",
     "react-material-workspace-layout": "^1.0.10",
     "react-monaco-editor": "^0.25.1",
@@ -44,6 +45,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "install-react-image-annotate": "mv ./node_modules/react-image-annotate/dist/* ./node_modules/react-image-annotate/",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9090 -s public",

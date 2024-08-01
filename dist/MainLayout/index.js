@@ -176,6 +176,7 @@ export var MainLayout = function MainLayout(_ref3) {
     onBeginBoxTransform: action("BEGIN_BOX_TRANSFORM", "box", "directions"),
     onBeginMovePolygonPoint: action("BEGIN_MOVE_POLYGON_POINT", "polygon", "pointIndex"),
     onBeginMoveLinePoint: action("BEGIN_MOVE_LINE_POINT", "line", "pointIndex"),
+    onBeginMoveLine: action("BEGIN_MOVE_LINE", "line"),
     onBeginMoveKeypoint: action("BEGIN_MOVE_KEYPOINT", "region", "keypointId"),
     onAddPolygonPoint: action("ADD_POLYGON_POINT", "polygon", "point", "pointIndex"),
     onSelectRegion: action("SELECT_REGION", "region"),

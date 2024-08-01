@@ -195,6 +195,10 @@ export const MainLayout = ({
         "line",
         "pointIndex"
       )}
+      onBeginMoveLine={action(
+        "BEGIN_MOVE_LINE",
+        "line"
+      )}
       onBeginMoveKeypoint={action(
         "BEGIN_MOVE_KEYPOINT",
         "region",
