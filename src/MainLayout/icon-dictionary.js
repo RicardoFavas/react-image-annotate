@@ -2,76 +2,41 @@
 
 import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faArrowsAlt,
-  faMousePointer,
-  faExpandArrowsAlt,
-  faGripLines,
-  faTag,
-  faPaintBrush,
-  faCrosshairs,
-  faDrawPolygon,
-  faVectorSquare,
-  faHandPaper,
-  faSearch,
-  faMask,
-  faEdit,
-  faChartLine,
-} from "@fortawesome/free-solid-svg-icons"
+import { faMask, faEdit } from "@fortawesome/free-solid-svg-icons"
+
+import { FaMask as MaskIcon } from "react-icons/fa";
+import { MdOutlineDraw as AreaIcon } from "react-icons/md";
+
+import { PiCursorBold as SelectIcon } from "react-icons/pi";
+import { PiHandBold as PanIcon } from "react-icons/pi";
+import { FaGripLines as ExpandingLineIcon } from "react-icons/fa";
+
+import { PiTagBold as TagIcon } from "react-icons/pi";
+import { PiMagnifyingGlassBold as ZoomIcon } from "react-icons/pi";
+
+import { PiPolygonBold as PolygonIcon } from "react-icons/pi";
+import { PiLineSegmentBold as LineIcon} from "react-icons/pi";
+import { PiBoundingBoxBold as RectangleIcon } from "react-icons/pi";
+import { PiDiamondBold as PointIcon} from "react-icons/pi";
+
+
 import FullscreenIcon from "@mui/icons-material/Fullscreen"
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew"
 
-const faStyle = { marginTop: 4, width: 16, height: 16, marginBottom: 4 }
+const faStyle = { width: 16, height: 16, marginTop: 4, marginBottom: 4 }
 
 export const iconDictionary = {
-  select: () => (
-    <FontAwesomeIcon
-      style={faStyle}
-      size="xs"
-      fixedWidth
-      icon={faMousePointer}
-    />
-  ),
-  pan: () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faHandPaper} />
-  ),
-  zoom: () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faSearch} />
-  ),
-  "show-tags": () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faTag} />
-  ),
-  "create-point": () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faCrosshairs} />
-  ),
-  "create-box": () => (
-    <FontAwesomeIcon
-      style={faStyle}
-      size="xs"
-      fixedWidth
-      icon={faVectorSquare}
-    />
-  ),
-  "create-polygon": () => (
-    <FontAwesomeIcon
-      style={faStyle}
-      size="xs"
-      fixedWidth
-      icon={faDrawPolygon}
-    />
-  ),
-  "create-expanding-line": () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faGripLines} />
-  ),
-  "create-line": () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faChartLine} />
-  ),
-  "show-mask": () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faMask} />
-  ),
-  "modify-allowed-area": () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faEdit} />
-  ),
+  select: () => <SelectIcon style={faStyle} size="xs" fixedWidth/>,
+  pan: () => <PanIcon style={faStyle} size="xs" fixedWidth />,
+  zoom: () => <ZoomIcon style={faStyle} size="xs"/>,
+  "show-tags": () => <TagIcon style={faStyle} size="xs" fixedWidth/>,
+  "create-point": () => <PointIcon style={faStyle} size="xs" fixedWidth/>,
+  "create-box": () => <RectangleIcon style={faStyle} size="xs" fixedWidth/>,
+  "create-polygon": () => <PolygonIcon style={faStyle} size="xs" fixedWidth></PolygonIcon>,
+  "create-expanding-line": () => <ExpandingLineIcon style={faStyle} size="xs" fixedWidth/>,
+  "create-line": () => <LineIcon style={faStyle} size="xs" fixedWidth/>,
+  "show-mask": () => <MaskIcon style={faStyle} size="xs" fixedWidth/>,
+  "modify-allowed-area": () => <AreaIcon style={faStyle} size="xs" fixedWidth/>,
   "create-keypoints": AccessibilityNewIcon,
   window: FullscreenIcon,
 }

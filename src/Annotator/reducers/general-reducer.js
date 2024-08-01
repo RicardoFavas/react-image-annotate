@@ -235,13 +235,8 @@ export default (state: MainLayoutState, action: Action) => {
     // RF LINE
     case "BEGIN_MOVE_LINE_POINT": {
       const { line, pointIndex } = action
-      console.log('bregin ai', line, pointIndex)
       state = closeEditors(state)
-      if (
-        state.mode &&
-        state.mode.mode === "DRAW_LINE" &&
-        pointIndex === 0
-      ) {
+      if (state.mode && state.mode.mode === "DRAW_LINE" && pointIndex === 0) {
         const newState = setIn(
           modifyRegion(line, {
             points: line.points,
@@ -261,6 +256,34 @@ export default (state: MainLayoutState, action: Action) => {
         mode: "MOVE_LINE_POINT",
         regionId: line.id,
         pointIndex,
+      });
+      if (typeof newState.onChange === 'function') {
+        newState.onChange(newState, action); // RFAVAS
+      }
+      return newState;
+    }
+    case "BEGIN_MOVE_LINE": {
+      const { line } = action
+      state = closeEditors(state)
+      if (state.mode && state.mode.mode === "DRAW_LINE") {
+        const newState = setIn(
+          modifyRegion(line, {
+            points: line.points,
+            open: false,
+          }),
+          ["mode"],
+          null
+        )
+        if (typeof newState.onChange === 'function') {
+          newState.onChange(newState, action); // RFAVAS
+        }
+        return newState;
+      } else {
+        state = saveToHistory(state, "Move Line")
+      }
+      const newState = setIn(state, ["mode"], {
+        mode: "MOVE_LINE",
+        regionId: line.id
       });
       if (typeof newState.onChange === 'function') {
         newState.onChange(newState, action); // RFAVAS
@@ -312,21 +335,41 @@ export default (state: MainLayoutState, action: Action) => {
           )
         }
         case "MOVE_LINE_POINT": { // RF LINE
-          console.log('fdx', state, x, y )
-
           const { pointIndex, regionId } = state.mode
           const [region, regionIndex] = getRegion(regionId)
           if (regionIndex === null) return state
+          let { x1, x2, y1, y2 } = region;
+          if (pointIndex === 0) {
+            x1 = x;
+            y1 = y;
+          } else if (pointIndex === 1) {
+            x2 = x;
+            y2 = y;
+          }
           return setIn(
             state,
             [...pathToActiveImage, "regions", regionIndex],
-            {
-              ...region,
-              x1: pointIndex === 0 ? x : region.x1,
-              y1: pointIndex === 0 ? y : region.y1,
-              x2: pointIndex === 1 ? x : region.x2,
-              y2: pointIndex === 1 ? y : region.y2,
-            }
+            { ...region, x1, y1, x2, y2 }
+          )
+        }
+        case "MOVE_LINE": { // RF LINE
+          const { regionId } = state.mode
+          const [region, regionIndex] = getRegion(regionId)
+          if (regionIndex === null) return state
+          let { x1, x2, y1, y2 } = region;
+
+          let dx = x - ((x1+x2)/2);
+          let dy = y - ((y1+y2)/2);
+
+          x1 += dx;
+          x2 += dx;
+          y1 += dy;
+          y2 += dy;
+
+          return setIn(
+            state,
+            [...pathToActiveImage, "regions", regionIndex],
+            { ...region, x1, y1, x2, y2 }
           )
         }
         case "MOVE_KEYPOINT": {
@@ -779,6 +822,7 @@ export default (state: MainLayoutState, action: Action) => {
         case "MOVE_REGION":
         case "RESIZE_KEYPOINTS":
         case "MOVE_LINE_POINT": // RF LINE
+        case "MOVE_LINE":
         case "MOVE_POLYGON_POINT": {
           if (typeof state.onChange === 'function') {
             state.onChange(state, action); // RFAVAS

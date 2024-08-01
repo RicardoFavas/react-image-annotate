@@ -102,7 +102,8 @@ const events = {
   onBeginBoxTransform: action("onBeginBoxTransform"),
 
   onBeginMovePolygonPoint: action("onBeginMovePolygonPoint"),
-  onBeginMoveLinePoint: action("onBeginMoveLinePoint"),
+  onBeginMoveLinePoint: action("onBeginMoveLinePoint"), // RF LINE
+  onBeginMoveLine: action("onBeginMoveLine"),
   onAddPolygonPoint: action("onAddPolygonPoint"),
   onClosePolygon: action("onClosePolygon"),
 

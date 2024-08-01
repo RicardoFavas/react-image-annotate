@@ -46,6 +46,7 @@ export const RegionSelectAndTransformBox = memo(
     onBeginBoxTransform,
     onBeginMovePolygonPoint,
     onBeginMoveLinePoint,
+    onBeginMoveLine,
     onBeginMoveKeypoint,
     onAddPolygonPoint,
     showHighlightBox,
@@ -218,7 +219,12 @@ export const RegionSelectAndTransformBox = memo(
               !zoomWithPrimary &&
               !r.locked &&
               r.highlighted &&
-              [[r.x1, r.y1], [r.x2, r.y2]].map(([x, y], i) => {
+              mat.a < 1.2 &&
+              [
+                [r.x1, r.y1], 
+                [r.x2, r.y2], 
+                [(r.x1+r.x2)/2.0, (r.y1+r.y2)/2.0]
+              ].map(([x, y], i) => {
                 const proj = mat
                   .clone()
                   .inverse()
@@ -228,15 +234,18 @@ export const RegionSelectAndTransformBox = memo(
                     key={i}
                     {...mouseEvents}
                     onMouseDown={(e) => {
-                      if (e.button === 0 && (!r.open || i === 0))
+                      if (e.button === 0 && !r.open && (i === 0 || i === 1))
                         return onBeginMoveLinePoint(r, i)
+                      if (e.button === 0 && !r.open && i === 2)
+                        return onBeginMoveLine(r)
                       mouseEvents.onMouseDown(e)
                     }}
                     style={{
-                      cursor: "move",
+                      cursor: i === 2 ? "grab" : "move",
+                      borderRadius: i === 2 ? 4 : undefined,
                       zIndex: 10,
-                      left: proj.x - 4,
-                      top: proj.y - 4,
+                      left: proj.x - 6,
+                      top: proj.y - 6,
                     }}
                   />
                 )

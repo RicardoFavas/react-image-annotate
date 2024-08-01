@@ -136,6 +136,7 @@ export type Action =
   | {| type: "BEGIN_BOX_TRANSFORM", box: Box, directions: [number, number] |}
   | {| type: "BEGIN_MOVE_POLYGON_POINT", polygon: Polygon, pointIndex: number |}
   | {| type: "BEGIN_MOVE_LINE_POINT", line: Line, pointIndex: number |}
+  | {| type: "BEGIN_MOVE_LINE", line: Line |}
   | {| type: "BEGIN_MOVE_KEYPOINT", region: Keypoints, keypointId: string |}
   | {|
       type: "ADD_POLYGON_POINT",
