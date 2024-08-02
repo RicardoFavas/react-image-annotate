@@ -162,8 +162,8 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
         cursor: i === 2 ? "grab" : "move",
         borderRadius: i === 2 ? 4 : undefined,
         zIndex: 10,
-        left: proj.x - 6,
-        top: proj.y - 6
+        left: proj.x - 4,
+        top: proj.y - 4
       }
     }));
   }))));
