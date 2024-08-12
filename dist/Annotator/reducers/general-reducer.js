@@ -120,6 +120,7 @@ export default (function (state, action) {
           state = saveToHistory(state, "Change Region Classification");
           var clsIndex = state.regionClsList.indexOf(action.region.cls);
           if (clsIndex !== -1) {
+            setInLocalStorage("selectedCls", action.region.cls);
             state = setIn(state, ["selectedCls"], action.region.cls);
             action.region.color = colors[clsIndex % colors.length];
           }
@@ -1013,6 +1014,7 @@ export default (function (state, action) {
             h: 1
           });
         }
+        setInLocalStorage("selectedTool", action.selectedTool);
         state = setIn(state, ["mode"], null);
         return setIn(state, ["selectedTool"], action.selectedTool);
       }

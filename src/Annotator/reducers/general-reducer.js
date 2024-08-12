@@ -136,6 +136,7 @@ export default (state: MainLayoutState, action: Action) => {
         state = saveToHistory(state, "Change Region Classification")
         const clsIndex = state.regionClsList.indexOf(action.region.cls)
         if (clsIndex !== -1) {
+          setInLocalStorage("selectedCls", action.region.cls)
           state = setIn(state, ["selectedCls"], action.region.cls)
           action.region.color = colors[clsIndex % colors.length]
         }
@@ -1003,6 +1004,7 @@ export default (state: MainLayoutState, action: Action) => {
       if (action.selectedTool === "modify-allowed-area" && !state.allowedArea) {
         state = setIn(state, ["allowedArea"], { x: 0, y: 0, w: 1, h: 1 })
       }
+      setInLocalStorage("selectedTool", action.selectedTool)
       state = setIn(state, ["mode"], null)
       return setIn(state, ["selectedTool"], action.selectedTool)
     }
