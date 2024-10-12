@@ -15,4 +15,6 @@ const Site = () => {
   return <Theme>{path === "demo" ? <DemoSite /> : <LandingPage />}</Theme>
 }
 
-ReactDOM.render(<Site />, document.getElementById("root"))
+const container = document.getElementById("root");
+const root = createRoot(container);
+root.render(<Site />);

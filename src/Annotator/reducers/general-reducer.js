@@ -924,7 +924,7 @@ export default (state: MainLayoutState, action: Action) => {
         (activeImage.regions || []).filter((r) => r.id !== action.region.id)
       )
       if (typeof newState.onChange === 'function') {
-        newState.onChange(newState); // RFAVAS
+        newState.onChange(newState, action); // RFAVAS
       }
       return newState;
     }
@@ -935,7 +935,7 @@ export default (state: MainLayoutState, action: Action) => {
         (activeImage.regions || []).filter((r) => !r.highlighted)
       )
       if (typeof state.onChange === 'function') {
-        state.onChange(state, action); // RFAVAS
+        newState.onChange(newState, action); // RFAVAS
       }
       return newState;
     }

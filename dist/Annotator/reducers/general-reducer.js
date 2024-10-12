@@ -930,7 +930,7 @@ export default (function (state, action) {
           return r.id !== action.region.id;
         }));
         if (typeof _newState9.onChange === 'function') {
-          _newState9.onChange(_newState9); // RFAVAS
+          _newState9.onChange(_newState9, action); // RFAVAS
         }
 
         return _newState9;
@@ -941,7 +941,7 @@ export default (function (state, action) {
           return !r.highlighted;
         }));
         if (typeof state.onChange === 'function') {
-          state.onChange(state, action); // RFAVAS
+          _newState10.onChange(_newState10, action); // RFAVAS
         }
 
         return _newState10;

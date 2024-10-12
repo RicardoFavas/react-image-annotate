@@ -54,6 +54,7 @@ export default (function (state, action) {
       case "SELECT_REGION":
       case "CHANGE_REGION":
       case "DELETE_REGION":
+      case "DELETE_SELECTED_REGION":
       case "OPEN_REGION_EDITOR":
         return copyImpliedRegions();
       case "MOUSE_DOWN":
