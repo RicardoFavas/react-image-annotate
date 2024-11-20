@@ -174,7 +174,10 @@ export const RegionLabel = ({
               />
             )}
             {onClose && (
-              <div style={{ marginTop: 4, display: "flex" }}>
+              <div style={{ marginTop: 4, display: "flex", alignItems: 'center' }}>
+                <div title='Confidence'>
+                  {region.confidence != null ? `Confidence: ${parseInt(region.confidence*100)}%` : null }
+                </div>
                 <div style={{ flexGrow: 1 }} />
                 <Button
                   onClick={() => onClose(region)}
