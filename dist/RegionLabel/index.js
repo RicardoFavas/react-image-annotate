@@ -168,9 +168,12 @@ export var RegionLabel = function RegionLabel(_ref) {
   }), onClose && /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 4,
-      display: "flex"
+      display: "flex",
+      alignItems: 'center'
     }
   }, /*#__PURE__*/React.createElement("div", {
+    title: "Confidence"
+  }, region.confidence != null ? "Confidence: ".concat(parseInt(region.confidence * 100), "%") : null), /*#__PURE__*/React.createElement("div", {
     style: {
       flexGrow: 1
     }
