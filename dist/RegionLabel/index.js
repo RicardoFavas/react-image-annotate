@@ -17,6 +17,21 @@ var theme = createTheme();
 var useStyles = makeStyles(function (theme) {
   return styles;
 });
+function valueToGradient(value) {
+  // Ensure the value is clamped between 0 and 100
+  value = Math.max(0, Math.min(100, value));
+
+  // Calculate the red and green components
+  var red = Math.floor(255 - value * 2.55); // Decrease red as value increases
+  var green = Math.floor(value * 2.55); // Increase green as value increases
+  var blue = 0; // Keep blue constant (optional for pure red-green gradient)
+
+  // Convert RGB to hexadecimal format
+  var redHex = red.toString(16).padStart(2, "0");
+  var greenHex = green.toString(16).padStart(2, "0");
+  var blueHex = blue.toString(16).padStart(2, "0");
+  return "#".concat(redHex).concat(greenHex).concat(blueHex);
+}
 export var RegionLabel = function RegionLabel(_ref) {
   var region = _ref.region,
     editing = _ref.editing,
@@ -35,6 +50,7 @@ export var RegionLabel = function RegionLabel(_ref) {
     var commentInput = commentInputRef.current.children[0].children[0];
     if (commentInput) return commentInput.focus();
   };
+  var confidence = region.confidence != null ? parseInt(region.confidence * 100) : null;
   return /*#__PURE__*/React.createElement(ThemeProvider, {
     theme: theme
   }, /*#__PURE__*/React.createElement(Paper, {
@@ -96,7 +112,6 @@ export var RegionLabel = function RegionLabel(_ref) {
     variant: "outlined"
   }, /*#__PURE__*/React.createElement(TrashIcon, {
     style: {
-      marginTop: -8,
       width: 16,
       height: 16
     }
@@ -171,9 +186,20 @@ export var RegionLabel = function RegionLabel(_ref) {
       display: "flex",
       alignItems: 'center'
     }
-  }, /*#__PURE__*/React.createElement("div", {
-    title: "Confidence"
-  }, region.confidence != null ? "Confidence: ".concat(parseInt(region.confidence * 100), "%") : null), /*#__PURE__*/React.createElement("div", {
+  }, confidence != null ? /*#__PURE__*/React.createElement("div", {
+    title: "Confidence of ".concat(confidence, "%"),
+    style: {
+      display: "flex",
+      backgroundColor: valueToGradient(confidence),
+      color: "#fff",
+      padding: 4,
+      paddingLeft: 8,
+      paddingRight: 8,
+      borderRadius: 4,
+      fontWeight: "bold",
+      textShadow: "0px 0px 5px rgba(0,0,0,0.4)"
+    }
+  }, confidence, "%") : null, /*#__PURE__*/React.createElement("div", {
     style: {
       flexGrow: 1
     }
