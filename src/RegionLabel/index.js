@@ -35,6 +35,24 @@ type Props = {
   allowComments?: boolean,
 }
 
+function valueToGradient(value) {
+  // Ensure the value is clamped between 0 and 100
+  value = Math.max(0, Math.min(100, value));
+  
+  // Calculate the red and green components
+  const red = Math.floor(255 - (value * 2.55)); // Decrease red as value increases
+  const green = Math.floor(value * 2.55); // Increase green as value increases
+  const blue = 0; // Keep blue constant (optional for pure red-green gradient)
+
+  // Convert RGB to hexadecimal format
+  const redHex = red.toString(16).padStart(2, "0");
+  const greenHex = green.toString(16).padStart(2, "0");
+  const blueHex = blue.toString(16).padStart(2, "0");
+
+  return `#${redHex}${greenHex}${blueHex}`;
+}
+
+
 export const RegionLabel = ({
   region,
   editing,
@@ -55,6 +73,8 @@ export const RegionLabel = ({
 
     if (commentInput) return commentInput.focus()
   }
+
+  const confidence = region.confidence != null ? parseInt(region.confidence*100) : null;
 
   return (
     <ThemeProvider theme={theme}>
@@ -87,7 +107,7 @@ export const RegionLabel = ({
           </div>
         ) : (
           <div style={{ width: 200 }}>
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ display: "flex", flexDirection: "row",  }}>
               <div
                 style={{
                   display: "flex",
@@ -111,7 +131,7 @@ export const RegionLabel = ({
                 size="small"
                 variant="outlined"
               >
-                <TrashIcon style={{ marginTop: -8, width: 16, height: 16 }} />
+                <TrashIcon style={{ width: 16, height: 16 }} />
               </IconButton>
             </div>
             {(allowedClasses || []).length > 0 && (
@@ -175,9 +195,26 @@ export const RegionLabel = ({
             )}
             {onClose && (
               <div style={{ marginTop: 4, display: "flex", alignItems: 'center' }}>
-                <div title='Confidence'>
-                  {region.confidence != null ? `Confidence: ${parseInt(region.confidence*100)}%` : null }
-                </div>
+                {
+                  confidence != null ?
+                  <div 
+                    title={`Confidence of ${confidence}%`}
+                    style={{
+                      display: "flex",
+                      backgroundColor: valueToGradient(confidence),
+                      color: "#fff",
+                      padding: 4,
+                      paddingLeft: 8,
+                      paddingRight: 8,
+                      borderRadius: 4,
+                      fontWeight: "bold",
+                      textShadow: "0px 0px 5px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    {confidence}%
+                  </div>
+                  : null
+                }
                 <div style={{ flexGrow: 1 }} />
                 <Button
                   onClick={() => onClose(region)}
