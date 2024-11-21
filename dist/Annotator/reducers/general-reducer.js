@@ -13,7 +13,7 @@ import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon";
 import clamp from "clamp";
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform";
 import setInLocalStorage from "../../utils/set-in-local-storage";
-import { uuidv7 } from "@kripod/uuidv7";
+import { v7 as uuidv7 } from 'uuid';
 var getRandomId = function getRandomId() {
   return uuidv7();
 };
