@@ -1,6 +1,8 @@
 import { grey } from "@mui/material/colors";
 export default {
   regionInfo: {
+    borderRadius: '4px',
+    // RF
     fontSize: 12,
     cursor: "default",
     transition: "opacity 200ms",
@@ -18,7 +20,12 @@ export default {
     // pointerEvents: "none",
     fontWeight: 600,
     color: grey[900],
-    padding: 8,
+    padding: 4,
+    // RF 
+    paddingRight: 6,
+    // RF 
+    paddingLeft: 6,
+    // RF 
     "& .name": {
       display: "flex",
       flexDirection: "row",

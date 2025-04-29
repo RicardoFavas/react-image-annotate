@@ -12,7 +12,7 @@ import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
 import clamp from "clamp"
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform"
 import setInLocalStorage from "../../utils/set-in-local-storage"
-import { v7 as uuidv7 } from 'uuid';
+import { uuidv7 } from "uuidv7";
 
 
 const getRandomId = () => {

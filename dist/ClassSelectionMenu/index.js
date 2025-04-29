@@ -148,7 +148,7 @@ export var ClassSelectionMenu = function ClassSelectionMenu(_ref6) {
       className: classnames({
         selected: label === selectedCls
       })
-    }, capitalize(label)), /*#__PURE__*/React.createElement(DashSep, null), /*#__PURE__*/React.createElement(Number, {
+    }, label), /*#__PURE__*/React.createElement(DashSep, null), /*#__PURE__*/React.createElement(Number, {
       className: classnames({
         selected: label === selectedCls
       })

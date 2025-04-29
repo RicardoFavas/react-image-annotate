@@ -180,7 +180,7 @@ export var RegionLabel = function RegionLabel(_ref) {
         comment: event.target.value
       }));
     }
-  }), onClose && /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 4,
       display: "flex",
@@ -203,7 +203,7 @@ export var RegionLabel = function RegionLabel(_ref) {
     style: {
       flexGrow: 1
     }
-  }), /*#__PURE__*/React.createElement(Button, {
+  }), onClose && /*#__PURE__*/React.createElement(Button, {
     onClick: function onClick() {
       return onClose(region);
     },
