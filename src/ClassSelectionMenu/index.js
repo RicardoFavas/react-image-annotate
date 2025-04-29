@@ -119,7 +119,7 @@ export const ClassSelectionMenu = ({
               style={{ backgroundColor: colors[index % colors.length] }}
             />
             <Label className={classnames({ selected: label === selectedCls })}>
-              {capitalize(label)}
+              {label}
             </Label>
             <DashSep />
             <Number className={classnames({ selected: label === selectedCls })}>

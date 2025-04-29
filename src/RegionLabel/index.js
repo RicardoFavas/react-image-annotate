@@ -193,29 +193,29 @@ export const RegionLabel = ({
                 }
               />
             )}
-            {onClose && (
-              <div style={{ marginTop: 4, display: "flex", alignItems: 'center' }}>
-                {
-                  confidence != null ?
-                  <div 
-                    title={`Confidence of ${confidence}%`}
-                    style={{
-                      display: "flex",
-                      backgroundColor: valueToGradient(confidence),
-                      color: "#fff",
-                      padding: 4,
-                      paddingLeft: 8,
-                      paddingRight: 8,
-                      borderRadius: 4,
-                      fontWeight: "bold",
-                      textShadow: "0px 0px 5px rgba(0,0,0,0.4)",
-                    }}
-                  >
-                    {confidence}%
-                  </div>
-                  : null
-                }
-                <div style={{ flexGrow: 1 }} />
+            <div style={{ marginTop: 4, display: "flex", alignItems: 'center' }}>
+              {
+                confidence != null ?
+                <div 
+                  title={`Confidence of ${confidence}%`}
+                  style={{
+                    display: "flex",
+                    backgroundColor: valueToGradient(confidence),
+                    color: "#fff",
+                    padding: 4,
+                    paddingLeft: 8,
+                    paddingRight: 8,
+                    borderRadius: 4,
+                    fontWeight: "bold",
+                    textShadow: "0px 0px 5px rgba(0,0,0,0.4)",
+                  }}
+                >
+                  {confidence}%
+                </div>
+                : null
+              }
+              <div style={{ flexGrow: 1 }} />
+              { onClose &&
                 <Button
                   onClick={() => onClose(region)}
                   size="small"
@@ -224,8 +224,8 @@ export const RegionLabel = ({
                 >
                   <CheckIcon />
                 </Button>
-              </div>
-            )}
+              }
+            </div>
           </div>
         )}
       </Paper>
