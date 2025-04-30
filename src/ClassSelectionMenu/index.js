@@ -1,57 +1,32 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState, memo } from "react"
 import { styled } from "@mui/material/styles"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import Box from "@mui/material/Box"
 import * as muiColors from "@mui/material/colors"
 import SidebarBoxContainer from "../SidebarBoxContainer"
+import { makeStyles } from "@mui/styles"
+
 import colors from "../colors"
+import Grid from "@mui/material/Grid"
+import Tooltip from "@mui/material/Tooltip"
+
 import BallotIcon from "@mui/icons-material/Ballot"
 import capitalize from "lodash/capitalize"
 import classnames from "classnames"
+import { grey } from "@mui/material/colors"
+import TrashIcon from "@mui/icons-material/Delete"
+import LockIcon from "@mui/icons-material/Lock"
+import UnlockIcon from "@mui/icons-material/LockOpen"
+import VisibleIcon from "@mui/icons-material/Visibility"
+import VisibleOffIcon from "@mui/icons-material/VisibilityOff"
+import ReorderIcon from "@mui/icons-material/SwapVert"
+import PieChartIcon from "@mui/icons-material/PieChart"
+
+import styles from "../RegionSelectorSidebarBox/styles"
 
 const theme = createTheme()
-const LabelContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  paddingTop: 4,
-  paddingBottom: 4,
-  paddingLeft: 16,
-  paddingRight: 16,
-  alignItems: "center",
-  cursor: "pointer",
-  opacity: 0.7,
-  backgroundColor: "#fff",
-  "&:hover": {
-    opacity: 1,
-  },
-  "&.selected": {
-    opacity: 1,
-    fontWeight: "bold",
-  },
-}))
-const Circle = styled("div")(({ theme }) => ({
-  width: 12,
-  height: 12,
-  borderRadius: 12,
-  marginRight: 8,
-}))
-const Label = styled("div")(({ theme }) => ({
-  fontSize: 11,
-}))
-const DashSep = styled("div")(({ theme }) => ({
-  flexGrow: 1,
-  borderBottom: `2px dotted ${muiColors.grey[300]}`,
-  marginLeft: 8,
-  marginRight: 8,
-}))
-const Number = styled("div")(({ theme }) => ({
-  fontSize: 11,
-  textAlign: "center",
-  minWidth: 14,
-  paddingTop: 2,
-  paddingBottom: 2,
-  fontWeight: "bold",
-  color: muiColors.grey[700],
-}))
+const useStyles = makeStyles((theme) => styles)
+
 
 // RFAVAS
 const classShortcuts = {
@@ -79,12 +54,246 @@ const classShortcuts = {
 */
 }
 
+const HeaderSep = styled("div")(({ theme }) => ({
+  borderTop: `1px solid ${grey[200]}`,
+  marginTop: 2,
+  marginBottom: 2,
+}))
+
+
+const RowLayout = ({
+  header,
+  highlighted,
+  order,
+  classification,
+  area,
+  tags,
+  trash,
+  lock,
+  visible,
+  onClick,
+}) => {
+  const classes = useStyles()
+  const [mouseOver, changeMouseOver] = useState(false)
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => changeMouseOver(true)}
+      onMouseLeave={() => changeMouseOver(false)}
+      className={classnames(classes.row, { header, highlighted })}
+    >
+      <Grid container alignItems="center">
+        <Grid item xs={1}>
+          <div style={{ textAlign: "right", paddingRight: 4 }}>{order}</div>
+        </Grid>
+        <Grid item xs={6}>
+          {classification}
+        </Grid>
+        <Grid item xs={2}>
+          <div style={{ textAlign: "right", paddingRight: 6 }}>{area}</div>
+        </Grid>
+        <Grid item xs={1}>
+          {trash}
+        </Grid>
+        <Grid item xs={1}>
+          {lock}
+        </Grid>
+        <Grid item xs={1}>
+          {visible}
+        </Grid>
+      </Grid>
+    </div>
+  )
+}
+
+const Chip = ({ color, text }) => {
+  const classes = useStyles()
+  return (
+    <span className={classes.chip}>
+      <div className="color" style={{ backgroundColor: color }} />
+      <div className="text">{text}</div>
+    </span>
+  )
+}
+
+
+const RowHeader = ({ regions, onChangeRegion, onDeleteRegion }) => {
+  const visible = regions.find(r => r.visible === false) == null;
+  const locked = regions.find(r => r.locked === false) == null;
+  return (
+    <RowLayout
+      header
+      highlighted={false}
+      order={<ReorderIcon className="icon" />}
+      classification={<div style={{ paddingLeft: 10 }}>Name</div>}
+      area={<PieChartIcon className="icon" />}
+      trash={<TrashIcon className="icon" onClick={() => regions.forEach(r => onDeleteRegion(r))} />}
+      lock={
+        <Tooltip title='Lock / Unlock (l)'>
+        {
+          locked === true ? (
+              <LockIcon
+                onClick={() =>
+                  regions.forEach(r =>  onChangeRegion({ ...r, locked: false }))
+                }
+                className="icon"
+              />
+          ) : (
+            <UnlockIcon
+              onClick={() =>
+                regions.forEach(r =>  onChangeRegion({ ...r, locked: true }))
+              }
+              className="icon"
+            />
+          )    
+        }
+        </Tooltip>
+      }
+      visible={
+        <Tooltip title='Show / Hide (v)'>
+          {
+            visible ? (
+              <VisibleIcon
+                onClick={() =>
+                  regions.forEach(r =>  onChangeRegion({ ...r, visible: false }))
+                }
+                className="icon"
+              />
+            ) : (
+              <VisibleOffIcon
+                onClick={() =>
+                  regions.forEach(r =>  onChangeRegion({ ...r, visible: true }))
+                }
+                className="icon"
+              />
+            )
+          }
+        </Tooltip>
+      }
+    />
+  )
+}
+
+const MemoRowHeader = memo(RowHeader)
+
+const Row = ({
+  highlighted,
+  onSelectCls,
+  onDeleteRegion,
+  onChangeRegion,
+  color,
+  cls,
+  index,
+  regions,
+}) => {
+  const visible = regions.every(r => r.visible === true);
+  const locked = regions.every(r => r.locked === true);
+  return (
+    <RowLayout
+      header={false}
+      highlighted={highlighted}
+      onClick={() => {
+        onSelectCls(cls)
+      }}
+      order={`${index + 1}`}
+      classification={<Chip text={cls || ""} color={color || "#ddd"} />}
+      area=""
+      trash={
+        <TrashIcon 
+          onClick={
+            () => {
+              regions.forEach(r => onDeleteRegion(r))
+            }
+          } 
+          className="icon2" 
+        />
+      }
+      lock={
+        locked ? (
+          <LockIcon
+            onClick={() => { 
+              regions.forEach(r => {
+                onChangeRegion({ ...r, locked: false })
+              })
+            }}
+            className="icon2"
+          />
+        ) : (
+          <UnlockIcon
+          onClick={() => { 
+            regions.forEach(r => {
+              onChangeRegion({ ...r, locked: true })
+            })
+          }}
+            className="icon2"
+          />
+        )
+      }
+      visible={
+        visible ? (
+          <VisibleIcon
+            onClick={() => { 
+              regions.forEach(r => {
+                onChangeRegion({ ...r, visible: false })
+              })
+            }}
+            className="icon2"
+          />
+        ) : (
+          <VisibleOffIcon
+          onClick={() => { 
+            regions.forEach(r => {
+              onChangeRegion({ ...r, visible: true })
+            })
+          }}
+            className="icon2"
+          />
+        )
+      }
+    />
+  )
+}
+
+
+const MemoRow = memo(
+  Row,
+  (prevProps, nextProps) =>
+    prevProps.highlighted === nextProps.highlighted &&
+    prevProps.id === nextProps.id &&
+    prevProps.index === nextProps.index &&
+    prevProps.cls === nextProps.cls &&
+    prevProps.color === nextProps.color &&
+    prevProps.regions === nextProps.regions
+)
+
+
 export const ClassSelectionMenu = ({
+  regions,
   selectedCls,
   regionClsList,
   onSelectCls,
+  onDeleteRegion,
+  onChangeRegion,
+  onSelectRegion,
 }) => {
-  useEffect(() => {
+  const classes = useStyles()
+  
+  const [classifications, setClassifications] = useState([]);
+  
+  useEffect(() => {    
+    const classifications = {}
+    regions.forEach(e => {
+      const cls = classifications[e.cls] = classifications[e.cls] || {
+        id: e.cls,
+        cls: e.cls,
+        color: e.color,
+        regions: [],
+      }
+      cls.regions.push(e);
+    });
+    setClassifications(Object.values(classifications))
+
+    /*
     const keyMapping = {}
     for (let i = 0; i < regionClsList.length; i++) {
       if (classShortcuts[i] != null) {
@@ -100,7 +309,9 @@ export const ClassSelectionMenu = ({
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [regionClsList, selectedCls])
+    */
+
+  }, [regions, regionClsList, selectedCls])
 
   return (
     <ThemeProvider theme={theme}>
@@ -110,24 +321,27 @@ export const ClassSelectionMenu = ({
         icon={<BallotIcon style={{ color: muiColors.grey[700] }} />}
         expandedByDefault
       >
-        {regionClsList.map((label, index) => (
-          <LabelContainer
-            className={classnames({ selected: label === selectedCls })}
-            onClick={() => onSelectCls(label)}
-          >
-            <Circle
-              style={{ backgroundColor: colors[index % colors.length] }}
+        <div className={classes.container}>
+          <MemoRowHeader 
+            regions={regions}
+            onChangeRegion={onChangeRegion}
+            onDeleteRegion={onDeleteRegion}
+          />
+          <HeaderSep />
+          {classifications.map((c, i) => (
+            <MemoRow
+              index={i}
+              key={c.id}
+              cls={c.cls}
+              color={c.color}
+              regions={c.regions}
+              allRegions={regions}
+              onSelectCls={onSelectCls}
+              onDeleteRegion={onDeleteRegion}
+              onChangeRegion={onChangeRegion}
             />
-            <Label className={classnames({ selected: label === selectedCls })}>
-              {label}
-            </Label>
-            <DashSep />
-            <Number className={classnames({ selected: label === selectedCls })}>
-              {classShortcuts[index] != null ? `Key [${classShortcuts[index]}]` : ""}
-            </Number>
-          </LabelContainer>
-        ))}
-        <Box pb={2} />
+          ))}
+        </div>
       </SidebarBoxContainer>
     </ThemeProvider>
   )

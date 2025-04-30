@@ -61,10 +61,10 @@ const RowLayout = ({
       className={classnames(classes.row, { header, highlighted })}
     >
       <Grid container alignItems="center">
-        <Grid item xs={2}>
-          <div style={{ textAlign: "right", paddingRight: 10 }}>{order}</div>
+        <Grid item xs={1}>
+          <div style={{ textAlign: "right", paddingRight: 4 }}>{order}</div>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           {classification}
         </Grid>
         <Grid item xs={2}>
@@ -84,10 +84,10 @@ const RowLayout = ({
   )
 }
 
-const RowHeader = ({ regions, onChangeRegion }) => {
+const RowHeader = ({ regions, onChangeRegion, onDeleteRegion }) => {
   // RFAVAS
-  const visible = regions.find(r => r.visible === false) == null;
-  const locked = regions.find(r => r.locked === false) == null;
+  const visible = regions.every(r => r.visible === true);
+  const locked = regions.every(r => r.locked === true);
 
   return (
     <RowLayout
@@ -96,7 +96,7 @@ const RowHeader = ({ regions, onChangeRegion }) => {
       order={<ReorderIcon className="icon" />}
       classification={<div style={{ paddingLeft: 10 }}>Class</div>}
       area={<PieChartIcon className="icon" />}
-      trash={<TrashIcon className="icon" />}
+      trash={<TrashIcon className="icon" onClick={() => regions.forEach(r => onDeleteRegion(r))} />}
       lock={
         <Tooltip title='Lock / Unlock (l)'>
         {
@@ -170,7 +170,7 @@ const Row = ({
       header={false}
       highlighted={highlighted}
       onClick={() => onSelectRegion(r)}
-      order={`#${index + 1}`}
+      order={`${index + 1}`}
       classification={<Chip text={cls || ""} color={color || "#ddd"} />}
       area=""
       trash={<TrashIcon onClick={() => onDeleteRegion(r)} className="icon2" />}
@@ -237,6 +237,7 @@ export const RegionSelectorSidebarBox = ({
           <MemoRowHeader 
             regions={regions}
             onChangeRegion={onChangeRegion}
+            onDeleteRegion={onDeleteRegion}
           />
           <HeaderSep />
           {regions.map((r, i) => (

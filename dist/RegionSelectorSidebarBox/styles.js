@@ -21,7 +21,7 @@ export default {
     }
   },
   row: {
-    padding: 4,
+    padding: 2,
     cursor: "pointer",
     "&.header:hover": {
       backgroundColor: "#fff"

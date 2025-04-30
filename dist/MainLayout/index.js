@@ -312,9 +312,13 @@ export var MainLayout = function MainLayout(_ref3) {
     }), state.taskDescription && /*#__PURE__*/React.createElement(TaskDescription, {
       description: state.taskDescription
     }), state.regionClsList && /*#__PURE__*/React.createElement(ClassSelectionMenu, {
+      regions: activeImage ? activeImage.regions : emptyArr,
       selectedCls: state.selectedCls,
       regionClsList: state.regionClsList,
-      onSelectCls: action("SELECT_CLASSIFICATION", "cls")
+      onSelectCls: action("SELECT_CLASSIFICATION", "cls"),
+      onSelectRegion: action("SELECT_REGION", "region"),
+      onDeleteRegion: action("DELETE_REGION", "region"),
+      onChangeRegion: action("CHANGE_REGION", "region")
     }), state.labelImages && /*#__PURE__*/React.createElement(TagsSidebarBox, {
       currentImage: activeImage,
       imageClsList: state.imageClsList,

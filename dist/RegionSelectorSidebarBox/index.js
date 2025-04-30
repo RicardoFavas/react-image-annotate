@@ -79,15 +79,15 @@ var RowLayout = function RowLayout(_ref3) {
     alignItems: "center"
   }, /*#__PURE__*/React.createElement(Grid, {
     item: true,
-    xs: 2
+    xs: 1
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "right",
-      paddingRight: 10
+      paddingRight: 4
     }
   }, order)), /*#__PURE__*/React.createElement(Grid, {
     item: true,
-    xs: 5
+    xs: 6
   }, classification), /*#__PURE__*/React.createElement(Grid, {
     item: true,
     xs: 2
@@ -109,14 +109,15 @@ var RowLayout = function RowLayout(_ref3) {
 };
 var RowHeader = function RowHeader(_ref4) {
   var regions = _ref4.regions,
-    onChangeRegion = _ref4.onChangeRegion;
+    onChangeRegion = _ref4.onChangeRegion,
+    onDeleteRegion = _ref4.onDeleteRegion;
   // RFAVAS
-  var visible = regions.find(function (r) {
-    return r.visible === false;
-  }) == null;
-  var locked = regions.find(function (r) {
-    return r.locked === false;
-  }) == null;
+  var visible = regions.every(function (r) {
+    return r.visible === true;
+  });
+  var locked = regions.every(function (r) {
+    return r.locked === true;
+  });
   return /*#__PURE__*/React.createElement(RowLayout, {
     header: true,
     highlighted: false,
@@ -132,7 +133,12 @@ var RowHeader = function RowHeader(_ref4) {
       className: "icon"
     }),
     trash: /*#__PURE__*/React.createElement(TrashIcon, {
-      className: "icon"
+      className: "icon",
+      onClick: function onClick() {
+        return regions.forEach(function (r) {
+          return onDeleteRegion(r);
+        });
+      }
     }),
     lock: /*#__PURE__*/React.createElement(Tooltip, {
       title: "Lock / Unlock (l)"
@@ -196,7 +202,7 @@ var Row = function Row(_ref5) {
     onClick: function onClick() {
       return onSelectRegion(r);
     },
-    order: "#".concat(index + 1),
+    order: "".concat(index + 1),
     classification: /*#__PURE__*/React.createElement(Chip, {
       text: cls || "",
       color: color || "#ddd"
@@ -266,7 +272,8 @@ export var RegionSelectorSidebarBox = function RegionSelectorSidebarBox(_ref6) {
     className: classes.container
   }, /*#__PURE__*/React.createElement(MemoRowHeader, {
     regions: regions,
-    onChangeRegion: onChangeRegion
+    onChangeRegion: onChangeRegion,
+    onDeleteRegion: onDeleteRegion
   }), /*#__PURE__*/React.createElement(HeaderSep, null), regions.map(function (r, i) {
     return /*#__PURE__*/React.createElement(MemoRow, Object.assign({
       key: r.id

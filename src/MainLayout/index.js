@@ -380,9 +380,13 @@ export const MainLayout = ({
                 ),
                 state.regionClsList && (
                   <ClassSelectionMenu
+                    regions={activeImage ? activeImage.regions : emptyArr}
                     selectedCls={state.selectedCls}
                     regionClsList={state.regionClsList}
                     onSelectCls={action("SELECT_CLASSIFICATION", "cls")}
+                    onSelectRegion={action("SELECT_REGION", "region")}
+                    onDeleteRegion={action("DELETE_REGION", "region")}
+                    onChangeRegion={action("CHANGE_REGION", "region")}
                   />
                 ),
                 state.labelImages && (
