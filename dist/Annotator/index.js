@@ -73,6 +73,7 @@ export var Annotator = function Annotator(_ref) {
 
   // TODO: RF este não é o melhor sitio para isto ficar, mas vai ficar aqui para já
   var hideCls = getFromLocalStorage("hideCls") || {};
+  images = JSON.parse(JSON.stringify(images));
   (images || []).forEach(function (img) {
     (img.regions || []).forEach(function (r) {
       if (r.cls) {

@@ -112,6 +112,7 @@ export const Annotator = ({
 
   // TODO: RF este não é o melhor sitio para isto ficar, mas vai ficar aqui para já
   const hideCls = getFromLocalStorage("hideCls") || {};
+  images = JSON.parse(JSON.stringify(images));
   (images || []).forEach((img) => {
     (img.regions || []).forEach((r) => {
       if (r.cls) {
