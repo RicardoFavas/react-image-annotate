@@ -70,6 +70,15 @@ export var Annotator = function Annotator(_ref) {
     });
     if (selectedImage === -1) selectedImage = undefined;
   }
+
+  // TODO: RF este não é o melhor sitio para isto ficar, mas vai ficar aqui para já
+  var hideCls = getFromLocalStorage("hideCls") || {}(images || []).forEach(function (img) {
+    (img.regions || []).forEach(function (r) {
+      if (r.cls) {
+        r.visible = hideCls[r.cls] === true ? false : true;
+      }
+    });
+  });
   var annotationType = images ? "image" : "video";
   var _useReducer = useReducer(historyHandler(combineReducers(annotationType === "image" ? imageReducer : videoReducer, generalReducer)), makeImmutable(_objectSpread({
       annotationType: annotationType,

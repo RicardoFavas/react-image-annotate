@@ -21,6 +21,8 @@ import VisibleIcon from "@mui/icons-material/Visibility";
 import VisibleOffIcon from "@mui/icons-material/VisibilityOff";
 import ReorderIcon from "@mui/icons-material/SwapVert";
 import PieChartIcon from "@mui/icons-material/PieChart";
+import setInLocalStorage from "./../utils/set-in-local-storage";
+import getFromLocalStorage from "./../utils/get-from-local-storage";
 import styles from "../RegionSelectorSidebarBox/styles";
 var theme = createTheme();
 var useStyles = makeStyles(function (theme) {
@@ -172,7 +174,7 @@ var RowHeader = function RowHeader(_ref4) {
       title: "Lock / Unlock (l)"
     }, locked === true ? /*#__PURE__*/React.createElement(LockIcon, {
       onClick: function onClick() {
-        return regions.forEach(function (r) {
+        regions.forEach(function (r) {
           return onChangeRegion(_objectSpread({}, r, {
             locked: false
           }));
@@ -193,20 +195,24 @@ var RowHeader = function RowHeader(_ref4) {
       title: "Show / Hide (v)"
     }, visible ? /*#__PURE__*/React.createElement(VisibleIcon, {
       onClick: function onClick() {
-        return regions.forEach(function (r) {
-          return onChangeRegion(_objectSpread({}, r, {
+        var hideCls = getFromLocalStorage("hideCls") || {};
+        regions.forEach(function (r) {
+          onChangeRegion(_objectSpread({}, r, {
             visible: false
           }));
+          hideCls[r.cls] = true;
         });
+        setInLocalStorage("hideCls", hideCls);
       },
       className: "icon"
     }) : /*#__PURE__*/React.createElement(VisibleOffIcon, {
       onClick: function onClick() {
-        return regions.forEach(function (r) {
-          return onChangeRegion(_objectSpread({}, r, {
+        regions.forEach(function (r) {
+          onChangeRegion(_objectSpread({}, r, {
             visible: true
           }));
         });
+        setInLocalStorage("hideCls", {});
       },
       className: "icon"
     }))
@@ -269,6 +275,9 @@ var Row = function Row(_ref5) {
     }),
     visible: visible ? /*#__PURE__*/React.createElement(VisibleIcon, {
       onClick: function onClick() {
+        var hideCls = getFromLocalStorage("hideCls") || {};
+        hideCls[cls] = true;
+        setInLocalStorage("hideCls", hideCls);
         regions.forEach(function (r) {
           onChangeRegion(_objectSpread({}, r, {
             visible: false
@@ -278,6 +287,9 @@ var Row = function Row(_ref5) {
       className: "icon2"
     }) : /*#__PURE__*/React.createElement(VisibleOffIcon, {
       onClick: function onClick() {
+        var hideCls = getFromLocalStorage("hideCls") || {};
+        delete hideCls[cls];
+        setInLocalStorage("hideCls", hideCls);
         regions.forEach(function (r) {
           onChangeRegion(_objectSpread({}, r, {
             visible: true
