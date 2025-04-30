@@ -76,9 +76,16 @@ export var Annotator = function Annotator(_ref) {
   images = JSON.parse(JSON.stringify(images));
   (images || []).forEach(function (img) {
     (img.regions || []).forEach(function (r) {
-      if (r.cls) {
-        r.visible = hideCls[r.cls] === true ? false : true;
+      var visible = true;
+      if (hideCls["*"] === true) {
+        visible = false;
       }
+      if (hideCls[r.cls] === false) {
+        visible = true;
+      } else if (hideCls[r.cls] === true) {
+        visible = false;
+      }
+      r.visible = visible;
     });
   });
   var annotationType = images ? "image" : "video";

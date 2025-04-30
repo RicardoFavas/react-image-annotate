@@ -196,11 +196,11 @@ var RowHeader = function RowHeader(_ref4) {
     }, visible ? /*#__PURE__*/React.createElement(VisibleIcon, {
       onClick: function onClick() {
         var hideCls = getFromLocalStorage("hideCls") || {};
+        hideCls['*'] = true;
         regions.forEach(function (r) {
           onChangeRegion(_objectSpread({}, r, {
             visible: false
           }));
-          hideCls[r.cls] = true;
         });
         setInLocalStorage("hideCls", hideCls);
       },
@@ -288,7 +288,11 @@ var Row = function Row(_ref5) {
     }) : /*#__PURE__*/React.createElement(VisibleOffIcon, {
       onClick: function onClick() {
         var hideCls = getFromLocalStorage("hideCls") || {};
-        delete hideCls[cls];
+        if (hideCls['*'] === true) {
+          hideCls[cls] = false;
+        } else {
+          delete hideCls[cls];
+        }
         setInLocalStorage("hideCls", hideCls);
         regions.forEach(function (r) {
           onChangeRegion(_objectSpread({}, r, {

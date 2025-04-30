@@ -115,9 +115,17 @@ export const Annotator = ({
   images = JSON.parse(JSON.stringify(images));
   (images || []).forEach((img) => {
     (img.regions || []).forEach((r) => {
-      if (r.cls) {
-        r.visible = (hideCls[r.cls] === true ? false : true);
+      let visible = true;
+      if (hideCls["*"] === true) {
+        visible = false;
       }
+      if (hideCls[r.cls] === false) {
+        visible = true;
+      } else
+      if (hideCls[r.cls] === true) {
+        visible = false;
+      }
+      r.visible = visible;
     })
   });
 

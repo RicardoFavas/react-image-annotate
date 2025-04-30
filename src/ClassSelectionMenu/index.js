@@ -161,9 +161,9 @@ const RowHeader = ({ regions, onChangeRegion, onDeleteRegion }) => {
               <VisibleIcon
                 onClick={() => {
                   const hideCls = getFromLocalStorage("hideCls") || {};
+                  hideCls['*'] = true;
                   regions.forEach(r => {
                      onChangeRegion({ ...r, visible: false })
-                     hideCls[r.cls] = true;
                   })
                   setInLocalStorage("hideCls", hideCls);
                 }}
@@ -259,7 +259,11 @@ const Row = ({
           <VisibleOffIcon
           onClick={() => { 
             const hideCls = getFromLocalStorage("hideCls") || {};
-            delete hideCls[cls];
+            if (hideCls['*'] === true) {
+              hideCls[cls] = false;
+            } else {
+              delete hideCls[cls];
+            }
             setInLocalStorage("hideCls", hideCls);
             regions.forEach(r => {
               onChangeRegion({ ...r, visible: true })
