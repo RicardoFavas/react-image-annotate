@@ -110,6 +110,16 @@ export const Annotator = ({
     if (selectedImage === -1) selectedImage = undefined
   }
 
+  // TODO: RF este não é o melhor sitio para isto ficar, mas vai ficar aqui para já
+  const hideCls = getFromLocalStorage("hideCls") || {}
+  (images || []).forEach((img) => {
+    (img.regions || []).forEach((r) => {
+      if (r.cls) {
+        r.visible = hideCls[r.cls] === true ? false : true;
+      }
+    })
+  })
+
   const annotationType = images ? "image" : "video"
   const [state, dispatchToReducer] = useReducer(
     historyHandler(

@@ -22,6 +22,11 @@ import VisibleOffIcon from "@mui/icons-material/VisibilityOff"
 import ReorderIcon from "@mui/icons-material/SwapVert"
 import PieChartIcon from "@mui/icons-material/PieChart"
 
+
+import setInLocalStorage from "./../utils/set-in-local-storage"
+import getFromLocalStorage from "./../utils/get-from-local-storage"
+
+
 import styles from "../RegionSelectorSidebarBox/styles"
 
 const theme = createTheme()
@@ -133,9 +138,9 @@ const RowHeader = ({ regions, onChangeRegion, onDeleteRegion }) => {
         {
           locked === true ? (
               <LockIcon
-                onClick={() =>
+                onClick={() => {
                   regions.forEach(r =>  onChangeRegion({ ...r, locked: false }))
-                }
+                }}
                 className="icon"
               />
           ) : (
@@ -154,16 +159,24 @@ const RowHeader = ({ regions, onChangeRegion, onDeleteRegion }) => {
           {
             visible ? (
               <VisibleIcon
-                onClick={() =>
-                  regions.forEach(r =>  onChangeRegion({ ...r, visible: false }))
-                }
+                onClick={() => {
+                  const hideCls = getFromLocalStorage("hideCls") || {}
+                  regions.forEach(r => {
+                     onChangeRegion({ ...r, visible: false })
+                     hideCls[r.cls] = true;
+                  })
+                  setInLocalStorage("hideCls", hideCls)
+                }}
                 className="icon"
               />
             ) : (
               <VisibleOffIcon
-                onClick={() =>
-                  regions.forEach(r =>  onChangeRegion({ ...r, visible: true }))
-                }
+                onClick={() => {
+                  regions.forEach(r => {
+                    onChangeRegion({ ...r, visible: true })
+                  })
+                  setInLocalStorage("hideCls", {})
+                }}
                 className="icon"
               />
             )
@@ -233,6 +246,9 @@ const Row = ({
         visible ? (
           <VisibleIcon
             onClick={() => { 
+              const hideCls = getFromLocalStorage("hideCls") || {}
+              hideCls[cls] = true;
+              setInLocalStorage("hideCls", hideCls)
               regions.forEach(r => {
                 onChangeRegion({ ...r, visible: false })
               })
@@ -242,6 +258,9 @@ const Row = ({
         ) : (
           <VisibleOffIcon
           onClick={() => { 
+            const hideCls = getFromLocalStorage("hideCls") || {}
+            delete hideCls[cls];
+            setInLocalStorage("hideCls", hideCls)
             regions.forEach(r => {
               onChangeRegion({ ...r, visible: true })
             })
