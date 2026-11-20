@@ -74,6 +74,7 @@ type Props = {
   onCloseRegionEdit: (Region) => any,
   onDeleteRegion: (Region) => any,
   onBeginBoxTransform: (Box, [number, number]) => any,
+  onBeginMovePolygon: (Polygon, { x: number, y: number }) => any,
   onBeginMovePolygonPoint: (Polygon, index: number) => any,
   onBeginMoveLinePoint: (Line, index: number) => any,
   onBeginMoveLine: (Line) => any,
@@ -131,6 +132,7 @@ export const ImageCanvas = ({
   onBeginRegionEdit,
   onCloseRegionEdit,
   onBeginBoxTransform,
+  onBeginMovePolygon,
   onBeginMovePolygonPoint,
   onBeginMoveLinePoint,
   onBeginMoveLine,
@@ -178,6 +180,13 @@ export const ImageCanvas = ({
     onMouseMove,
     onMouseDown,
     onMouseUp,
+  })
+
+  const handleBeginMovePolygon = useEventCallback((polygon, event) => {
+    const { left, top } = canvasEl.current.getBoundingClientRect()
+    const { iw, ih } = layoutParams.current
+    const point = mat.applyToPoint(event.clientX - left, event.clientY - top)
+    onBeginMovePolygon(polygon, { x: point.x / iw, y: point.y / ih })
   })
 
   useLayoutEffect(() => changeMat(mat.clone()), [windowSize])
@@ -375,6 +384,7 @@ export const ImageCanvas = ({
             layoutParams={layoutParams}
             mat={mat}
             onBeginBoxTransform={onBeginBoxTransform}
+            onBeginMovePolygon={handleBeginMovePolygon}
             onBeginMovePolygonPoint={onBeginMovePolygonPoint}
             onBeginMoveLinePoint={onBeginMoveLinePoint}
             onBeginMoveLine={onBeginMoveLine}

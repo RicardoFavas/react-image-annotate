@@ -45,7 +45,11 @@ export type Mode =
       original: { x: number, y: number, w: number, h: number },
       isNew?: boolean,
     |}
-  | {| mode: "MOVE_REGION" |}
+  | {|
+      mode: "MOVE_REGION",
+      regionId: string | number,
+      dragOffset?: { x: number, y: number },
+    |}
   | {| mode: "MOVE_KEYPOINT", regionId: string, keypointId: string |}
   | {|
       mode: "RESIZE_KEYPOINTS",
@@ -134,6 +138,11 @@ export type Action =
   | {| type: "SELECT_REGION", region: Region |}
   | {| type: "BEGIN_MOVE_POINT", point: Point |}
   | {| type: "BEGIN_BOX_TRANSFORM", box: Box, directions: [number, number] |}
+  | {|
+      type: "BEGIN_MOVE_POLYGON",
+      polygon: Polygon,
+      point?: { x: number, y: number },
+    |}
   | {| type: "BEGIN_MOVE_POLYGON_POINT", polygon: Polygon, pointIndex: number |}
   | {| type: "BEGIN_MOVE_LINE_POINT", line: Line, pointIndex: number |}
   | {| type: "BEGIN_MOVE_LINE", line: Line |}

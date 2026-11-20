@@ -1,6 +1,6 @@
 // @flow
 import type { MainLayoutState, Action } from "../../MainLayout/types"
-import { moveRegion } from "../../ImageCanvas/region-tools.js"
+import { getPolygonCenter, moveRegion } from "../../ImageCanvas/region-tools.js"
 import { getIn, setIn, updateIn } from "seamless-immutable"
 import moment from "moment"
 import isEqual from "lodash/isEqual"
@@ -200,6 +200,20 @@ export default (state: MainLayoutState, action: Action) => {
           original: { x: box.x, y: box.y, w: box.w, h: box.h },
         })
       }
+    }
+    case "BEGIN_MOVE_POLYGON": {
+      const regionIndex = getRegionIndex(action.polygon)
+      if (regionIndex === null) return state
+      const polygon = activeImage.regions[regionIndex]
+      if (polygon.locked || polygon.open || polygon.points.length < 3) return state
+      const center = getPolygonCenter(polygon)
+      const point = action.point || center
+      state = closeEditors(state)
+      return setIn(state, ["mode"], {
+        mode: "MOVE_REGION",
+        regionId: polygon.id,
+        dragOffset: { x: point.x - center.x, y: point.y - center.y },
+      })
     }
     case "BEGIN_MOVE_POLYGON_POINT": {
       const { polygon, pointIndex } = action
@@ -408,7 +422,11 @@ export default (state: MainLayoutState, action: Action) => {
           return setIn(
             state,
             [...pathToActiveImage, "regions", regionIndex],
-            moveRegion(activeImage.regions[regionIndex], x, y)
+            moveRegion(
+              activeImage.regions[regionIndex],
+              x - (state.mode.dragOffset ? state.mode.dragOffset.x : 0),
+              y - (state.mode.dragOffset ? state.mode.dragOffset.y : 0)
+            )
           )
         }
         case "RESIZE_BOX": {

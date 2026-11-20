@@ -7,6 +7,7 @@ import moment from "moment"
 const typesToSaveWithHistory = {
   BEGIN_BOX_TRANSFORM: "Transform/Move Box",
   BEGIN_MOVE_POINT: "Move Point",
+  BEGIN_MOVE_POLYGON: "Move Polygon",
   DELETE_REGION: "Delete Region",
 }
 

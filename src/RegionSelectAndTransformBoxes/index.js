@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import PreventScrollToParents from "../PreventScrollToParents"
 import Tooltip from "@mui/material/Tooltip"
+import { getPolygonCenter } from "../ImageCanvas/region-tools"
 
 const theme = createTheme()
 const TransformGrabber = styled("div")(({ theme }) => ({
@@ -44,6 +45,7 @@ export const RegionSelectAndTransformBox = memo(
     fullImageSegmentationMode = false,
     mat,
     onBeginBoxTransform,
+    onBeginMovePolygon,
     onBeginMovePolygonPoint,
     onBeginMoveLinePoint,
     onBeginMoveLine,
@@ -53,6 +55,13 @@ export const RegionSelectAndTransformBox = memo(
   }) => {
     const pbox = projectRegionBox(r)
     const { iw, ih } = layoutParams.current
+    const polygonCenter = r.type === "polygon" ? getPolygonCenter(r) : null
+    const projectedPolygonCenter = polygonCenter
+      ? mat
+          .clone()
+          .inverse()
+          .applyToPoint(polygonCenter.x * iw, polygonCenter.y * ih)
+      : null
     return (
       <ThemeProvider theme={theme}>
         <Fragment>
@@ -102,6 +111,35 @@ export const RegionSelectAndTransformBox = memo(
                   }}
                 />
               ))}
+            {r.type === "polygon" &&
+              r.highlighted &&
+              !r.open &&
+              !r.locked &&
+              !dragWithPrimary &&
+              !zoomWithPrimary &&
+              !createWithPrimary &&
+              r.points.length >= 3 && (
+                <TransformGrabber
+                  {...mouseEvents}
+                  aria-label="Move polygon"
+                  title="Move polygon"
+                  onMouseDown={(e) => {
+                    if (e.button === 0) {
+                      e.preventDefault()
+                      return onBeginMovePolygon(r, e)
+                    }
+                    mouseEvents.onMouseDown(e)
+                  }}
+                  style={{
+                    left: projectedPolygonCenter.x,
+                    top: projectedPolygonCenter.y,
+                    transform: "translate(-50%, -50%)",
+                    cursor: "grab",
+                    borderRadius: 4,
+                    zIndex: 9,
+                  }}
+                />
+              )}
             {r.type === "polygon" &&
               !dragWithPrimary &&
               !zoomWithPrimary &&
@@ -268,7 +306,12 @@ export const RegionSelectAndTransformBoxes = memo(
         return <RegionSelectAndTransformBox key={r.id} {...props} region={r} />
       })
   },
-  (n, p) => n.regions === p.regions && n.mat === p.mat
+  (n, p) =>
+    n.regions === p.regions &&
+    n.mat === p.mat &&
+    n.dragWithPrimary === p.dragWithPrimary &&
+    n.createWithPrimary === p.createWithPrimary &&
+    n.zoomWithPrimary === p.zoomWithPrimary
 )
 
 export default RegionSelectAndTransformBoxes

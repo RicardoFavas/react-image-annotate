@@ -12,34 +12,38 @@ export const testRegions = [
   {
     type: "point",
     id: "point1",
-    cls: "Paper",
+    cls: "Alpha",
     highlighted: true,
     x: 0.8,
     y: 0.5,
     visible: true,
+    locked: false,
     color: "#f00",
   },
   {
     type: "point",
     id: "point2",
-    cls: "Dude's Head",
+    cls: "Alpha",
     tags: ["human", "head", "male"],
     x: 0.1,
     y: 0.15,
     visible: true,
+    locked: false,
     color: "#0F0",
   },
   {
     type: "box",
     id: "box1",
-    cls: "Business Card",
+    cls: "Alpha",
     highlighted: true,
     x: 0.315,
     y: 0.63,
     w: 0.067,
     h: 0.045,
     visible: true,
+    locked: false,
     color: "#ff0",
+    confidence: 0.60,
   },
   {
     type: "polygon",
@@ -57,6 +61,7 @@ export const testRegions = [
       [0.5792, 0.4895],
     ],
     visible: true,
+    locked: false,
     color: "#f0f",
   },
   {
@@ -70,6 +75,7 @@ export const testRegions = [
       [0.2132, 0.7311],
     ],
     visible: true,
+    locked: false,
     color: "#00f",
   },
   {
@@ -83,6 +89,7 @@ export const testRegions = [
     h: 0.67 - 0.5847,
     src: exampleMask,
     visible: true,
+    locked: false,
     color: "#00f",
   },
 ]
@@ -101,6 +108,7 @@ const events = {
 
   onBeginBoxTransform: action("onBeginBoxTransform"),
 
+  onBeginMovePolygon: action("onBeginMovePolygon"),
   onBeginMovePolygonPoint: action("onBeginMovePolygonPoint"),
   onBeginMoveLinePoint: action("onBeginMoveLinePoint"), // RF LINE
   onBeginMoveLine: action("onBeginMoveLine"),

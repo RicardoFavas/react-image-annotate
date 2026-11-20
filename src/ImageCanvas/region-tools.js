@@ -158,6 +158,18 @@ export const getEnclosingBox = (region: Region) => {
   throw new Error("unknown region")
 }
 
+export const getPolygonCenter = (polygon: Polygon) => {
+  if (polygon.points.length === 0) return { x: 0, y: 0 }
+  const total = polygon.points.reduce(
+    (sum, [x, y]) => ({ x: sum.x + x, y: sum.y + y }),
+    { x: 0, y: 0 }
+  )
+  return {
+    x: total.x / polygon.points.length,
+    y: total.y / polygon.points.length,
+  }
+}
+
 export const moveRegion = (region: Region, x: number, y: number) => {
   switch (region.type) {
     case "point": {
@@ -165,6 +177,16 @@ export const moveRegion = (region: Region, x: number, y: number) => {
     }
     case "box": {
       return { ...region, x: x - region.w / 2, y: y - region.h / 2 }
+    }
+    case "polygon": {
+      if (region.points.length === 0) return region
+      const center = getPolygonCenter(region)
+      const dx = x - center.x
+      const dy = y - center.y
+      return {
+        ...region,
+        points: region.points.map(([px, py]) => [px + dx, py + dy]),
+      }
     }
   }
   return region

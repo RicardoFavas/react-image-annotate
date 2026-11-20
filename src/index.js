@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from "react-dom/client"
 import Theme from "./Theme"
 import DemoSite from "./DemoSite"
 import LandingPage from "./LandingPage"
