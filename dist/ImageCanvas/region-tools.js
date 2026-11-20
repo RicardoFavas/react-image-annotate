@@ -131,6 +131,28 @@ export var getEnclosingBox = function getEnclosingBox(region) {
   }
   throw new Error("unknown region");
 };
+export var getPolygonCenter = function getPolygonCenter(polygon) {
+  if (polygon.points.length === 0) return {
+    x: 0,
+    y: 0
+  };
+  var total = polygon.points.reduce(function (sum, _ref17) {
+    var _ref18 = _slicedToArray(_ref17, 2),
+      x = _ref18[0],
+      y = _ref18[1];
+    return {
+      x: sum.x + x,
+      y: sum.y + y
+    };
+  }, {
+    x: 0,
+    y: 0
+  });
+  return {
+    x: total.x / polygon.points.length,
+    y: total.y / polygon.points.length
+  };
+};
 export var moveRegion = function moveRegion(region, x, y) {
   switch (region.type) {
     case "point":
@@ -145,6 +167,21 @@ export var moveRegion = function moveRegion(region, x, y) {
         return _objectSpread({}, region, {
           x: x - region.w / 2,
           y: y - region.h / 2
+        });
+      }
+    case "polygon":
+      {
+        if (region.points.length === 0) return region;
+        var center = getPolygonCenter(region);
+        var dx = x - center.x;
+        var dy = y - center.y;
+        return _objectSpread({}, region, {
+          points: region.points.map(function (_ref19) {
+            var _ref20 = _slicedToArray(_ref19, 2),
+              px = _ref20[0],
+              py = _ref20[1];
+            return [px + dx, py + dy];
+          })
         });
       }
   }

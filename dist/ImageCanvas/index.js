@@ -84,6 +84,7 @@ export var ImageCanvas = function ImageCanvas(_ref2) {
     onBeginRegionEdit = _ref2.onBeginRegionEdit,
     onCloseRegionEdit = _ref2.onCloseRegionEdit,
     onBeginBoxTransform = _ref2.onBeginBoxTransform,
+    onBeginMovePolygon = _ref2.onBeginMovePolygon,
     onBeginMovePolygonPoint = _ref2.onBeginMovePolygonPoint,
     onBeginMoveLinePoint = _ref2.onBeginMoveLinePoint,
     onBeginMoveLine = _ref2.onBeginMoveLine,
@@ -152,6 +153,19 @@ export var ImageCanvas = function ImageCanvas(_ref2) {
     }),
     mouseEvents = _useMouse.mouseEvents,
     mousePosition = _useMouse.mousePosition;
+  var handleBeginMovePolygon = useEventCallback(function (polygon, event) {
+    var _canvasEl$current$get = canvasEl.current.getBoundingClientRect(),
+      left = _canvasEl$current$get.left,
+      top = _canvasEl$current$get.top;
+    var _layoutParams$current = layoutParams.current,
+      iw = _layoutParams$current.iw,
+      ih = _layoutParams$current.ih;
+    var point = mat.applyToPoint(event.clientX - left, event.clientY - top);
+    onBeginMovePolygon(polygon, {
+      x: point.x / iw,
+      y: point.y / ih
+    });
+  });
   useLayoutEffect(function () {
     return changeMat(mat.clone());
   }, [windowSize]);
@@ -211,9 +225,9 @@ export var ImageCanvas = function ImageCanvas(_ref2) {
     var context = canvas.getContext("2d");
     context.save();
     context.transform.apply(context, _toConsumableArray(mat.clone().inverse().toArray()));
-    var _layoutParams$current = layoutParams.current,
-      iw = _layoutParams$current.iw,
-      ih = _layoutParams$current.ih;
+    var _layoutParams$current2 = layoutParams.current,
+      iw = _layoutParams$current2.iw,
+      ih = _layoutParams$current2.ih;
     if (allowedArea) {
       // Pattern to indicate the NOT allowed areas
       var x = allowedArea.x,
@@ -242,9 +256,9 @@ export var ImageCanvas = function ImageCanvas(_ref2) {
     }
     context.restore();
   });
-  var _layoutParams$current2 = layoutParams.current,
-    iw = _layoutParams$current2.iw,
-    ih = _layoutParams$current2.ih;
+  var _layoutParams$current3 = layoutParams.current,
+    iw = _layoutParams$current3.iw,
+    ih = _layoutParams$current3.ih;
   var zoomBox = !zoomStart || !zoomEnd ? null : _objectSpread({}, mat.clone().inverse().applyToPoint(zoomStart.x, zoomStart.y), {
     w: (zoomEnd.x - zoomStart.x) / mat.a,
     h: (zoomEnd.y - zoomStart.y) / mat.d
@@ -310,6 +324,7 @@ export var ImageCanvas = function ImageCanvas(_ref2) {
     layoutParams: layoutParams,
     mat: mat,
     onBeginBoxTransform: onBeginBoxTransform,
+    onBeginMovePolygon: handleBeginMovePolygon,
     onBeginMovePolygonPoint: onBeginMovePolygonPoint,
     onBeginMoveLinePoint: onBeginMoveLinePoint,
     onBeginMoveLine: onBeginMoveLine,

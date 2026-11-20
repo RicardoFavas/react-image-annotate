@@ -3,6 +3,7 @@ import moment from "moment";
 var typesToSaveWithHistory = {
   BEGIN_BOX_TRANSFORM: "Transform/Move Box",
   BEGIN_MOVE_POINT: "Move Point",
+  BEGIN_MOVE_POLYGON: "Move Polygon",
   DELETE_REGION: "Delete Region"
 };
 export var saveToHistory = function saveToHistory(state, name) {

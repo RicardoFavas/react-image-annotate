@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import PreventScrollToParents from "../PreventScrollToParents";
 import Tooltip from "@mui/material/Tooltip";
+import { getPolygonCenter } from "../ImageCanvas/region-tools";
 var theme = createTheme();
 var TransformGrabber = styled("div")(function (_ref) {
   var theme = _ref.theme;
@@ -34,6 +35,7 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
     fullImageSegmentationMode = _ref2$fullImageSegmen === void 0 ? false : _ref2$fullImageSegmen,
     mat = _ref2.mat,
     onBeginBoxTransform = _ref2.onBeginBoxTransform,
+    onBeginMovePolygon = _ref2.onBeginMovePolygon,
     onBeginMovePolygonPoint = _ref2.onBeginMovePolygonPoint,
     onBeginMoveLinePoint = _ref2.onBeginMoveLinePoint,
     onBeginMoveLine = _ref2.onBeginMoveLine,
@@ -44,6 +46,8 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
   var _layoutParams$current = layoutParams.current,
     iw = _layoutParams$current.iw,
     ih = _layoutParams$current.ih;
+  var polygonCenter = r.type === "polygon" ? getPolygonCenter(r) : null;
+  var projectedPolygonCenter = polygonCenter ? mat.clone().inverse().applyToPoint(polygonCenter.x * iw, polygonCenter.y * ih) : null;
   return /*#__PURE__*/React.createElement(ThemeProvider, {
     theme: theme
   }, /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(PreventScrollToParents, null, showHighlightBox && r.type !== "polygon" && r.type !== "line" && /*#__PURE__*/React.createElement(HighlightBox, {
@@ -73,7 +77,25 @@ export var RegionSelectAndTransformBox = memo(function (_ref2) {
         borderRadius: px === 0.5 && py === 0.5 ? 4 : undefined
       }
     }));
-  }), r.type === "polygon" && !dragWithPrimary && !zoomWithPrimary && !r.locked && r.highlighted && r.points.map(function (_ref5, i) {
+  }), r.type === "polygon" && r.highlighted && !r.open && !r.locked && !dragWithPrimary && !zoomWithPrimary && !createWithPrimary && r.points.length >= 3 && /*#__PURE__*/React.createElement(TransformGrabber, Object.assign({}, mouseEvents, {
+    "aria-label": "Move polygon",
+    title: "Move polygon",
+    onMouseDown: function onMouseDown(e) {
+      if (e.button === 0) {
+        e.preventDefault();
+        return onBeginMovePolygon(r, e);
+      }
+      mouseEvents.onMouseDown(e);
+    },
+    style: {
+      left: projectedPolygonCenter.x,
+      top: projectedPolygonCenter.y,
+      transform: "translate(-50%, -50%)",
+      cursor: "grab",
+      borderRadius: 4,
+      zIndex: 9
+    }
+  })), r.type === "polygon" && !dragWithPrimary && !zoomWithPrimary && !r.locked && r.highlighted && r.points.map(function (_ref5, i) {
     var _ref6 = _slicedToArray(_ref5, 2),
       px = _ref6[0],
       py = _ref6[1];
@@ -181,6 +203,6 @@ export var RegionSelectAndTransformBoxes = memo(function (props) {
     }));
   });
 }, function (n, p) {
-  return n.regions === p.regions && n.mat === p.mat;
+  return n.regions === p.regions && n.mat === p.mat && n.dragWithPrimary === p.dragWithPrimary && n.createWithPrimary === p.createWithPrimary && n.zoomWithPrimary === p.zoomWithPrimary;
 });
 export default RegionSelectAndTransformBoxes;

@@ -174,6 +174,7 @@ export var MainLayout = function MainLayout(_ref3) {
     onCloseRegionEdit: action("CLOSE_REGION_EDITOR", "region"),
     onDeleteRegion: action("DELETE_REGION", "region"),
     onBeginBoxTransform: action("BEGIN_BOX_TRANSFORM", "box", "directions"),
+    onBeginMovePolygon: action("BEGIN_MOVE_POLYGON", "polygon", "point"),
     onBeginMovePolygonPoint: action("BEGIN_MOVE_POLYGON_POINT", "polygon", "pointIndex"),
     onBeginMoveLinePoint: action("BEGIN_MOVE_LINE_POINT", "line", "pointIndex"),
     onBeginMoveLine: action("BEGIN_MOVE_LINE", "line"),
